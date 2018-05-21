@@ -9,7 +9,7 @@ BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 
 function error_exit {
     echo >&2
-    echo "$1" >&2   ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    echo "ERROR: $1" >&2   ## Send message to stderr. Exclude >&2 if you don't want it that way.
     echo >&2
     exit "${2:-1}"  ## Return a code specified by $2 or 1 by default.
 }
@@ -20,7 +20,7 @@ function error_exit {
 #   location in build
 function install_file {
     timestamp=`date +%Y-%m-%d-%H:%M`
-    echo "installing $1 in [$2]"
+    echo -c "installing $1 in [$2]\t\t"
     if [ -f ${2}${1} ]
     then
         diff ${2}${1} ${3}$1 > /dev/null
