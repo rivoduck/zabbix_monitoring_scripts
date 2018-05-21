@@ -20,7 +20,7 @@ function error_exit {
 #   location in build
 function install_file {
     timestamp=`date +%Y-%m-%d-%H:%M`
-    echo -c "installing $1 in [$2]\t\t"
+    printf "installing %s in [%s]\t\t", $1, $2
     if [ -f ${2}${1} ]
     then
         diff ${2}${1} ${3}$1 > /dev/null
