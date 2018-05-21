@@ -41,6 +41,11 @@ then
 	error_exit "cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]" 
 fi
 
+if [ ! -d ${BUILD_BASE} ]
+then
+	error_exit "Cannot find distribution, make sure files are installed in ${BUILD_BASE}" 
+fi
+
 
 
 install_file userparameter_topix.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${ZABBIX_AGENT_CONF_D}
