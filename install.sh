@@ -27,12 +27,12 @@ function install_file {
         if [ $? -ne 0 ]
         then
             cp "${2}${1}" "${2}${1}-$timestamp"
+            cp ${3}$1 ${2}${1}
+            echo " [file copied]"
         else
             echo " [no change]"
         fi
     fi
-    cp ${3}$1 ${2}${1}
-    echo " [file copied]"
 }
 
 
