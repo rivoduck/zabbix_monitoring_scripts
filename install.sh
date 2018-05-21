@@ -4,7 +4,7 @@
 
 ZABBIX_BASE_CONFDIR="/etc/zabbix/"
 ZABBIX_AGENT_CONF_D="zabbix_agentd.conf.d/"
-BUILD_BASE="/opt/zabbix_monitoring_scripts"
+BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 
 
 function error_exit {
@@ -20,20 +20,20 @@ function error_exit {
 #   location in build
 function install_file {
     timestamp=`date +%Y-%m-%d-%H:%M`
-    print "installing $1 in [$2]"
+    echo "installing $1 in [$2]"
     if [ -f ${2}${1} ]
     then
         diff ${2}${1} ${3}$1 > /dev/null
         if $? -ne 0
         then
-            cp ${2}${1} "${2}${1}-$timestamp"
+            cp "${2}${1}" "${2}${1}-$timestamp"
         else
             echo " [no change]"
         fi
     fi
     cp ${3}$1 ${2}${1}
     echo " [file copied]"
-
+}
 
 
 if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ]
