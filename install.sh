@@ -24,7 +24,7 @@ function install_file {
     if [ -f ${2}${1} ]
     then
         diff ${2}${1} ${3}$1 > /dev/null
-        if $? -ne 0
+        if [ $? -ne 0 ]
         then
             cp "${2}${1}" "${2}${1}-$timestamp"
         else
