@@ -13,31 +13,18 @@ BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 # check directories and files 
 if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ]
 then
-	error_exit "cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]" 
+    error_exit "cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]" 
 fi
 
 if [ ! -d ${BUILD_BASE} ]
 then
-	error_exit "Cannot find distribution, make sure files are installed in ${BUILD_BASE}" 
+    error_exit "Cannot find distribution, make sure files are installed in ${BUILD_BASE}" 
 fi
 
-
-printf "checking Xen version\t\t\t"
-which xe
-if [ $? -eq 0 ]
+xen_detect
+if [ $0 -eq -1 ]
 then
-    echo "[Xen Server]"
-else
-    which xm
-    if [ $? -eq 0 ]
-    then
-        echo "[Xen]"
-    else
-        echo "[cannot find]"
-        error_exit "Cannot find Xen/XenServer installation, make sure xm or xe are in the path"
-    fi
-fi
-
+    error_exit "cannot find xm or xe"
 
 
 
