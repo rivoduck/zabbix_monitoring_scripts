@@ -17,8 +17,7 @@
 //            "mac":"aa:cd:00:00:00:33",
 //            "name":"vif1"
 //         }
-//      ],
-//      "blockdevices":"phy:\/dev\/xenvolume\/astronomia-swap;phy:\/dev\/xenvolume\/astronomia-disk"
+//      ]
 //   }
                 $stream=array();
 		exec("xm list -l", &$stream);
@@ -80,9 +79,9 @@
 					if ($parenthesisbalance_domain == $parenthesisbalance_vbd) {
 						// finito un block device (vbd)
 						if (!array_key_exists("blockdevices", $domain)) {
-							$domain["blockdevices"]=$blockdevice;
+							//$domain["blockdevices"]=$blockdevice;
 						} else {
-							$domain["blockdevices"].=";".$blockdevice;
+							//$domain["blockdevices"].=";".$blockdevice;
 						}
 						$inside_vbd=false;
 					} else {
