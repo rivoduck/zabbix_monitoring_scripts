@@ -43,7 +43,7 @@ function install_file() {
 function xen_detect() {
     if [ "X$1" == "X-v" ]
     then
-        printf "%-70s" "checking Xen version"
+        printf "%-80s" "checking Xen version"
     fi
     which xe > /dev/null
     if [ $? -eq 0 ]
