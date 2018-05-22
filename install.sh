@@ -22,7 +22,7 @@ then
 fi
 
 xen_detect
-if [ $0 -eq -1 ]
+if [ $? -eq -1 ]
 then
     error_exit "cannot find xm or xe"
 fi
