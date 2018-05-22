@@ -22,7 +22,12 @@ function install_file() {
         then
             cp "${2}${1}" "${2}${1}-$timestamp"
             cp ${3}$1 ${2}${1}
-            echo "[file copied]"
+            if [ $? -eq 0 ]
+            then
+                echo "[file copied]"
+            else
+                echo "[fail]"
+            fi
         else
             echo "[no change]"
         fi
