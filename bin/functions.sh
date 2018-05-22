@@ -13,7 +13,7 @@ function error_exit() {
 #   location in build
 function install_file() {
     timestamp=`date +%Y-%m-%d-%H:%M`
-    message=sprintf "installing %s in [%s]" $1 $2
+    message=sprintf "installing %s in [%s]" "$1" "$2"
     printf "%-70s" $message
     if [ -f ${2}${1} ]
     then
