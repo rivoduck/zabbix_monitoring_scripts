@@ -25,7 +25,7 @@ xen_detect
 if [ $0 -eq -1 ]
 then
     error_exit "cannot find xm or xe"
-
+fi
 
 
 # install files
