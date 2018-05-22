@@ -30,13 +30,13 @@ function install_file() {
 
 # detect Xen or XenServer
 # return values:
-#   -1 cannot find xm or xe, error
-#    0 XenServer found
-#    1 Xen found
+#    0 cannot find xm or xe, error
+#    1 XenServer found
+#    2 Xen found
 function xen_detect() {
     if [ "X$1" == "X-v" ]
     then
-        printf "checking Xen version\t\t\t\t\t\t\t\t"
+        printf "checking Xen version\t\t\t\t\t\t\t\t\t"
     fi
     which xe > /dev/null
     if [ $? -eq 0 ]
@@ -45,7 +45,7 @@ function xen_detect() {
         then
             echo "[Xen Server]"
         fi
-        return 0
+        return 1
     else
         which xm > /dev/null
         if [ $? -eq 0 ]
@@ -54,13 +54,13 @@ function xen_detect() {
             then
                 echo "[Xen]"
             fi
-            return 1
+            return 2
         else
             if [ "X$1" == "X-v" ]
             then
                 echo "[cannot find]"
             fi
-            return -1
+            return 0
         fi
     fi
 }
