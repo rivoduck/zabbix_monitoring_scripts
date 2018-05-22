@@ -6,12 +6,13 @@ current_dir=$(dirname "$0")
 
 
 xen_detect
-if [ $? -eq 0 ]
+res=$?
+if [ $res -eq 0 ]
 then
     # error
     exit -1
 else
-    if [ $? -eq 1 ]
+    if [ $res -eq 1 ]
     then
         # XenServer
         ${current_dir}/discover_xenserver_vms.sh
