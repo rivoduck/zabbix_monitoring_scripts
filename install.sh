@@ -16,7 +16,7 @@ errors=""
 echo
 
 # check directories and files 
-printf "%-70s" "checking zabbix conf dir"
+printf "%-80s" "checking zabbix conf dir"
 if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ]
 then
     errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]${NEWLINE}"
@@ -26,7 +26,7 @@ else
     echo "[OK]"
 fi
 
-printf "%-70s" "checking distribution dir"
+printf "%-80s" "checking distribution dir"
 if [ ! -d ${BUILD_BASE} ]
 then
     errors="${errors}Cannot find distribution, make sure files are installed in ${BUILD_BASE}${NEWLINE}"
@@ -46,7 +46,7 @@ else
     if [ $res -eq 2 ]
     then
         # Xen checks
-        printf "%-70s" "checking PHP"
+        printf "%-80s" "checking PHP"
         which php > /dev/null
         if [ $? -ne 0 ]
         then

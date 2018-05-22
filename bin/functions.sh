@@ -14,7 +14,7 @@ function error_exit() {
 function install_file() {
     timestamp=`date +%Y-%m-%d-%H:%M`
     message=$(printf "installing %s in [%s]" "$1" "$2")
-    printf "%-70s" "$message"
+    printf "%-80s" "$message"
     if [ -f ${2}${1} ]
     then
         diff ${2}${1} ${3}$1 > /dev/null
