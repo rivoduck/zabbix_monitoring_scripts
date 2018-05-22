@@ -1,10 +1,11 @@
 <?php
 // this script returns a JSON array of VMs with the format:
 //   {  
-//      "ncpu":"1",
+//      "VCPUs-number":"1",
 //      "uuid":"3848cce7-ad9c-4342-04a5-7c48a99b99fb",
-//      "name":"astronomia",
-//      "ram_mb":"2048",
+//      "name-label":"astronomia",
+//      "name-description": "not supported in Xen",
+//      "memory-actual_mb":"2048",
 //      "ports":[  
 //         {  
 //            "ip":"194.116.73.192",
@@ -35,6 +36,7 @@
 
 		
 		$waitcount_sec=0;
+                $waitcount_timeout=20;
 		foreach($stream as $i => $line) {
 			
 			if ($line == "") {
@@ -94,13 +96,14 @@
 					$domain["uuid"]=$trimmedline_arr[1];
 				}
 				if ($trimmedline_arr[0] == "name") {
-					$domain["name"]=$trimmedline_arr[1];
+					$domain["name-label"]=$trimmedline_arr[1];
 				}
+                                $domain["name-description"]="";
 				if ($trimmedline_arr[0] == "vcpus") {
-					$domain["ncpu"]=$trimmedline_arr[1];
+					$domain["VCPUs-number"]=$trimmedline_arr[1];
 				}
 				if ($trimmedline_arr[0] == "memory") {
-					$domain["ram_mb"]=$trimmedline_arr[1];
+					$domain["memory-actual_mb"]=$trimmedline_arr[1];
 				}
 				if ($trimmedline_arr[0] == "vif") {
 					$parenthesisbalance_vif=$parenthesisbalance_domain - 1;
@@ -117,7 +120,7 @@
 					$port_counter=0;
 					
 					// salta Domain-0
-					if ($domain["name"] != "Domain-0") {
+					if ($domain["name-label"] != "Domain-0") {
 						$vms[]=$domain;
 					}
 					
