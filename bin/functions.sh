@@ -34,7 +34,7 @@ function install_file() {
 #    0 XenServer found
 #    1 Xen found
 function xen_detect() {
-    printf "checking Xen version\t\t\t"
+    printf "checking Xen version\t\t\t\t\t\t"
     which xe > /dev/null
     if [ $? -eq 0 ]
     then
