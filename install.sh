@@ -6,29 +6,64 @@ ZABBIX_BASE_CONFDIR="/etc/zabbix/"
 ZABBIX_AGENT_CONF_D="zabbix_agentd.conf.d/"
 BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 
+NEWLINE=$'\n'
 
 # import functions
 . ./bin/functions.sh
 
+errors=""
+
+echo
+
 # check directories and files 
+printf "%-70s" "checking zabbix conf dir"
 if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ]
 then
-    error_exit "cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]" 
+    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]${NEWLINE}"
+    echo "[fail]"
+    # error_exit "Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]" 
+else
+    echo "[OK]"
 fi
 
+printf "%-70s" "checking distribution dir"
 if [ ! -d ${BUILD_BASE} ]
 then
-    error_exit "Cannot find distribution, make sure files are installed in ${BUILD_BASE}" 
+    errors="${errors}Cannot find distribution, make sure files are installed in ${BUILD_BASE}${NEWLINE}"
+    echo "[fail]"
+    # error_exit "Cannot find distribution, make sure files are installed in ${BUILD_BASE}" 
+else
+    echo "[OK]"
 fi
 
 xen_detect -v
-if [ $? -eq 0 ]
+res=$?
+if [ $res -eq 0 ]
 then
-    error_exit "cannot find xm or xe"
+    errors="${errors}cannot find xm or xe${NEWLINE}"
+    # error_exit "cannot find xm or xe"
+else
+    if [ $res -eq 2 ]
+    then
+        # Xen checks
+        printf "%-70s" "checking PHP"
+        which php
+        if [ $? -ne 0 ]
+        then
+            errors="${errors}Cannot find PHP executable, plese install php-cli"
+            echo "[fail]"
+        else
+            echo "[OK]"
+        fi
+    fi
 fi
 
-
-# install files
-install_file userparameter_topix.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${ZABBIX_AGENT_CONF_D}
-
+if [ "X${errors}" == "X" ]
+then
+    # install files
+    install_file userparameter_topix.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${ZABBIX_AGENT_CONF_D}
+else
+    # errors occourred
+    error_exit "${errors}"
+fi
 

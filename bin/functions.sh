@@ -1,8 +1,9 @@
 function error_exit() {
     echo >&2
-    echo "ERROR: $1" >&2   ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    echo "ERRORS:" >&2  
+    echo "$1" >&2  
     echo >&2
-    exit "${2:-1}"  ## Return a code specified by $2 or 1 by default.
+    exit "-1"
 }
 
 # copy file into place
@@ -12,7 +13,8 @@ function error_exit() {
 #   location in build
 function install_file() {
     timestamp=`date +%Y-%m-%d-%H:%M`
-    printf "installing %s in [%s]\t\t" $1 $2
+    message=sprintf "installing %s in [%s]" $1 $2
+    printf "%-70s" $message
     if [ -f ${2}${1} ]
     then
         diff ${2}${1} ${3}$1 > /dev/null
@@ -36,7 +38,7 @@ function install_file() {
 function xen_detect() {
     if [ "X$1" == "X-v" ]
     then
-        printf "checking Xen version\t\t\t\t\t\t\t\t\t"
+        printf "%-70s" "checking Xen version"
     fi
     which xe > /dev/null
     if [ $? -eq 0 ]
