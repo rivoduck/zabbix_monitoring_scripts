@@ -21,7 +21,7 @@ then
     error_exit "Cannot find distribution, make sure files are installed in ${BUILD_BASE}" 
 fi
 
-xen_detect
+xen_detect -v
 if [ $? -eq -1 ]
 then
     error_exit "cannot find xm or xe"
