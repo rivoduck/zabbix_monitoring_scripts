@@ -47,7 +47,7 @@ else
     then
         # Xen checks
         printf "%-70s" "checking PHP"
-        which php
+        which php > /dev/null
         if [ $? -ne 0 ]
         then
             errors="${errors}Cannot find PHP executable, plese install php-cli"
