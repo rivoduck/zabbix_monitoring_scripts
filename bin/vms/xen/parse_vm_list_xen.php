@@ -157,10 +157,11 @@
 	if ($vm_name == "") {
 		// generate discovery list of VMs (only name and state)
 		foreach($vms as $vm) {
-			$data[]={
-				'{#VMNAME}': $vm["name-label"],
-				'{#VMSTATE}': $vm["power-state"]
-			};
+			$vm_entry=array();
+			$vm_entry['{#VMNAME}']=$vm["name-label"];
+			$vm_entry['{#VMSTATE}']=$vm["power-state"];
+			
+			$data[]=$vm_entry;
 		}
 	}
 	
