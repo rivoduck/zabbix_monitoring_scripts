@@ -16,9 +16,9 @@ else
     if [ $res -eq 1 ]
     then
         # XenServer
-        ${current_dir}/discover_xenserver_vms.sh $vm_name
+        ${current_dir}/xen/discover_xenserver_vms.sh $vm_name
     else
         # Xen
-        ${current_dir}/discover_xen_vms.sh $vm_name
+        ${current_dir}/xen/discover_xen_vms.sh $vm_name
     fi
 fi
