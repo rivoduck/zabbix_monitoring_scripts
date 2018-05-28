@@ -20,7 +20,8 @@ function install_file() {
         diff ${2}${1} ${3}$1 > /dev/null
         if [ $? -ne 0 ]
         then
-			mkdir -p "/opt/zabbix_monitoring_scripts/backup/"
+			# backup and copy
+			mkdir -p /opt/zabbix_monitoring_scripts/backup/
             mv "${2}${1}" "/opt/zabbix_monitoring_scripts/backup/${1}-$timestamp"
             cp ${3}$1 ${2}${1}
             if [ $? -eq 0 ]
@@ -32,6 +33,15 @@ function install_file() {
         else
             echo "[no change]"
         fi
+	else
+		# copy no backup
+        cp ${3}$1 ${2}${1}
+        if [ $? -eq 0 ]
+        then
+            echo "[file copied]"
+        else
+            echo "[fail]"
+		fi
     fi
 }
 
