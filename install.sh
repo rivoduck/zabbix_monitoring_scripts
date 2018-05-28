@@ -36,7 +36,7 @@ else
     echo "[OK]"
 fi
 
-xen_detect -v
+vm_detect -v
 res=$?
 if [ $res -eq 0 ]
 then

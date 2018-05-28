@@ -37,13 +37,13 @@ function install_file() {
 
 # detect Xen or XenServer
 # return values:
-#    0 cannot find xm or xe, error
+#    0 no known virtualizer detected, cannot find xm or xe, error
 #    1 XenServer found
 #    2 Xen found
-function xen_detect() {
+function vm_detect() {
     if [ "X$1" == "X-v" ]
     then
-        printf "%-80s" "checking Xen version"
+        printf "%-80s" "checking Virtualizer type"
     fi
     which xe > /dev/null
     if [ $? -eq 0 ]

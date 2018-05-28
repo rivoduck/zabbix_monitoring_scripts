@@ -6,7 +6,7 @@ vm_name=$1
 . ${current_dir}/../functions.sh
 
 
-xen_detect
+vm_detect
 res=$?
 if [ $res -eq 0 ]
 then
