@@ -152,6 +152,18 @@
 				
 		}
 	}
-		
-	print(json_encode($vms));
+	
+	$data=[]
+	if ($vm_name == "") {
+		// generate discovery list of VMs (only name and state)
+		foreach($vms as $vm) {
+			$data[]={
+				'{#VMNAME}': $vm["name-label"],
+				'{#VMSTATE}': $vm["power-state"]
+			};
+		}
+	}
+	
+	
+	print(json_encode({"data": $data}));
 ?>

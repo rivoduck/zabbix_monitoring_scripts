@@ -55,6 +55,18 @@ else
         else
             echo "[OK]"
         fi
+	else
+        # XenServer checks
+        printf "%-80s" "checking Python"
+        which python > /dev/null
+        if [ $? -ne 0 ]
+        then
+            errors="${errors}Cannot find Python executable, plese install python"
+            echo "[fail]"
+        else
+            echo "[OK]"
+        fi
+		
     fi
 fi
 

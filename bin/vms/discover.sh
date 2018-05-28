@@ -16,9 +16,9 @@ else
     if [ $res -eq 1 ]
     then
         # XenServer
-        ${current_dir}/xen/discover_xenserver_vms.sh $vm_name
+        python ${current_dir}/parse_vm_list_xenserver.py $vm_name
     else
         # Xen
-        ${current_dir}/xen/discover_xen_vms.sh $vm_name
+        php ${current_dir}/parse_vm_list_xen.php $vm_name
     fi
 fi
