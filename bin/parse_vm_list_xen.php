@@ -140,8 +140,8 @@
 				continue;
 			}
 			if ($line != "") {
-				$vm_name=explode($line)[0];
-				$domain["name-label"] = $vm_name;
+				$line_arr=explode($line);
+				$domain["name-label"] = $line_arr[0];
 				$domain["power-state"]="running";
 				
 				// salta Domain-0
