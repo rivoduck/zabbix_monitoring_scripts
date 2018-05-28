@@ -140,7 +140,7 @@
 				continue;
 			}
 			if ($line != "") {
-				$line_arr=explode($line);
+				$line_arr=explode(" ", $line);
 				$domain["name-label"] = $line_arr[0];
 				$domain["power-state"]="running";
 				
