@@ -166,5 +166,5 @@
 	}
 	
 	
-	print(json_encode(array("data" => $data));
+	print(json_encode(array("data" => $data)));
 ?>
