@@ -3,7 +3,7 @@
 current_dir=$(dirname "$0")
 vm_name=$1
 
-. ${current_dir}/functions.sh
+. ${current_dir}/../functions.sh
 
 
 xen_detect
