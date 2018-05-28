@@ -163,6 +163,25 @@
 			
 			$data[]=$vm_entry;
 		}
+	} else {
+		// return details of selected VM only
+		if (count($vms) > 0) {
+			$vm=$vms[0];
+		} else {
+			// create dummy VM for disappearing VM
+			$vm=array("VCPUs-number" => "0", "uuid" => "deleted", "name-label" => $vm_name, "name-description" => "not supported in Xen", "power-state" => "deleted", "memory-actual_mb" => "0", "ports" => array() );
+		}
+		$vm_entry=array();
+		$vm_entry['{#VMNAME}']=$vm["name-label"];
+		$vm_entry['{#VMSTATE}']=$vm["power-state"];
+		$vm_entry['{#VMCPUS}']=$vm["VCPUs-number"];
+		$vm_entry['{#VMUUID}']=$vm["uuid"];
+		$vm_entry['{#VMDESC}']=$vm["name-description"];
+		$vm_entry['{#VMMEM}']=$vm["memory-actual_mb"];
+		$vm_entry['{#VMPORTS}']=$vm["ports"];
+		
+		$data=$vm_entry;
+		
 	}
 	
 	
