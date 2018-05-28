@@ -5,6 +5,7 @@
 //      "uuid":"3848cce7-ad9c-4342-04a5-7c48a99b99fb",
 //      "name-label":"astronomia",
 //      "name-description": "not supported in Xen",
+//      "power-state": "running",
 //      "memory-actual_mb":"2048",
 //      "ports":[  
 //         {  
@@ -19,9 +20,15 @@
 //         }
 //      ]
 //   }
-                $stream=array();
-		exec("xm list -l", &$stream);
+
+	$vm_name="";
+	if (isset($argv[1])) {
+	    $vm_name=$argv[1];
 		
+		// get list of VMs with details
+        $stream=array();
+		exec("xm list -l " . $vm_name, &$stream);
+	
 		$parenthesisbalance_domain=0;
 		$parenthesisbalance_vif=0;
 		$parenthesisbalance_vbd=0;
@@ -34,34 +41,23 @@
 		$inside_vbd=false;
 
 		
-		$waitcount_sec=0;
-                $waitcount_timeout=20;
 		foreach($stream as $i => $line) {
-			
-			if ($line == "") {
-				if ($waitcount_sec > $waitcount_timeout) {
-					$errors[]="Timeout nel comando xm list -l";
-					break;
-				} else {
-					$waitcount_sec++;
-					sleep(1);
-				}
-			} else {
+			if ($line != "") {
 				// dati OK, processa la linea
 				$parenthesisbalance_domain+=substr_count($line, "(") - substr_count($line, ")");
 				$trimmedline=trim($line, " \t\n\r()");
 				$trimmedline_arr=explode(" ",$trimmedline);
-				
+			
 				if ($inside_vif) {
 					if ($parenthesisbalance_domain == $parenthesisbalance_vif) {
 						// finita una porta (vif)
 						$port["name"]="vif".$port_counter;
-						
+					
 						if (!array_key_exists("ports", $domain)) {
 							$domain["ports"]=array();
 						}
 						$domain["ports"][]=$port;
-						
+					
 						$port=array();
 						$port_counter++;
 						$inside_vif=false;
@@ -97,7 +93,6 @@
 				if ($trimmedline_arr[0] == "name") {
 					$domain["name-label"]=$trimmedline_arr[1];
 				}
-                                $domain["name-description"]="";
 				if ($trimmedline_arr[0] == "vcpus") {
 					$domain["VCPUs-number"]=$trimmedline_arr[1];
 				}
@@ -113,11 +108,15 @@
 					$inside_vbd=true;
 				}
 				
+				// compatibilita' con XenServer
+				$domain["name-description"]="";
+				$domain["power-state"]="running";
+				
 				// controlla se e' finito un dominio
 				if ($parenthesisbalance_domain == 0) {
 					$port=array();
 					$port_counter=0;
-					
+				
 					// salta Domain-0
 					if ($domain["name-label"] != "Domain-0") {
 						$vms[]=$domain;
@@ -126,6 +125,32 @@
 					$domain=array();
 				}
 			}			
+		} else {
+			// get list of VMs names with status
+	        $stream=array();
+			exec("xm list", &$stream);
+	
+			$vms=array();
+			$domain=array();
+			$skipfirstline=true;
+			foreach($stream as $i => $line) {
+				if ($skipfirstline) {
+					$skipfirstline=false;
+					continue;
+				}
+				if ($line != "") {
+					$vm_name=explode($line)[0];
+					$domain["name-label"] = $vm_name;
+					$domain["power-state"]="running";
+					
+					// salta Domain-0
+					if ($domain["name-label"] != "Domain-0") {
+						$vms[]=$domain;
+					}
+					
+				}
+				
 		}
-		print(json_encode($vms));
+		
+	print(json_encode($vms));
 ?>
