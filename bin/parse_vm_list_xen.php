@@ -9,14 +9,13 @@
 //      "memory-actual_mb":"2048",
 //      "ports":[  
 //         {  
-//            "ip":"194.116.73.192",
-//            "mac":"aa:cc:00:00:00:64",
 //            "name":"vif0"
+//            "mac":"aa:cc:00:00:00:64",
+//            "ips": ["194.116.73.192"],
 //         },
 //         {  
-//            "ip":"194.116.124.181",
-//            "mac":"aa:cd:00:00:00:33",
 //            "name":"vif1"
+//            "ips": ["194.116.124.181"],
 //         }
 //      ]
 //   }
@@ -63,7 +62,7 @@
 						$inside_vif=false;
 					} else {
 						if ($trimmedline_arr[0] == "ip") {
-							$port["ip"]=$trimmedline_arr[1];
+							$port["ips"]=array($trimmedline_arr[1]);
 						}
 						if ($trimmedline_arr[0] == "mac") {
 							$port["mac"]=$trimmedline_arr[1];
