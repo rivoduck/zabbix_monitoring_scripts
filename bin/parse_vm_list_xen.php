@@ -124,33 +124,35 @@
 					
 					$domain=array();
 				}
-			}			
-		} else {
-			// get list of VMs names with status
-	        $stream=array();
-			exec("xm list", &$stream);
-	
-			$vms=array();
-			$domain=array();
-			$skipfirstline=true;
-			foreach($stream as $i => $line) {
-				if ($skipfirstline) {
-					$skipfirstline=false;
-					continue;
-				}
-				if ($line != "") {
-					$vm_name=explode($line)[0];
-					$domain["name-label"] = $vm_name;
-					$domain["power-state"]="running";
-					
-					// salta Domain-0
-					if ($domain["name-label"] != "Domain-0") {
-						$vms[]=$domain;
-					}
-					
+			}
+		}
+	} else {
+		// get list of VMs names with status
+        $stream=array();
+		exec("xm list", &$stream);
+
+		$vms=array();
+		$domain=array();
+		$skipfirstline=true;
+		foreach($stream as $i => $line) {
+			if ($skipfirstline) {
+				$skipfirstline=false;
+				continue;
+			}
+			if ($line != "") {
+				$vm_name=explode($line)[0];
+				$domain["name-label"] = $vm_name;
+				$domain["power-state"]="running";
+				
+				// salta Domain-0
+				if ($domain["name-label"] != "Domain-0") {
+					$vms[]=$domain;
 				}
 				
+			}
+				
 		}
+	}
 		
 	print(json_encode($vms));
 ?>
