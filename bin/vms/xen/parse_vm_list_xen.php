@@ -153,7 +153,7 @@
 		}
 	}
 	
-	$data=array()
+	$data=array();
 	if ($vm_name == "") {
 		// generate discovery list of VMs (only name and state)
 		foreach($vms as $vm) {
