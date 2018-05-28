@@ -1,6 +1,7 @@
 #!/bin/bash
 
 current_dir=$(dirname "$0")
+vm_name=$1
 
 . ${current_dir}/functions.sh
 
@@ -15,9 +16,9 @@ else
     if [ $res -eq 1 ]
     then
         # XenServer
-        ${current_dir}/discover_xenserver_vms.sh
+        ${current_dir}/discover_xenserver_vms.sh $vm_name
     else
         # Xen
-        ${current_dir}/discover_xen_vms.sh
+        ${current_dir}/discover_xen_vms.sh $vm_name
     fi
 fi
