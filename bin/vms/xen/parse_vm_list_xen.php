@@ -30,6 +30,7 @@
 		$command=$argv[2];
 	}
 	
+	$reply="";
 		
 	// get list of VMs with details
     $stream=array();
@@ -142,6 +143,8 @@
 			$vm_entry['{#VMUUID}']=$vm["uuid"];
 			
 			$data[]=$vm_entry;
+			
+			$reply=json_encode(array("data" => $data));
 		}
 	} else {
 		// return details of selected VM only
@@ -163,9 +166,9 @@
 		*/
 		
 		if ($command == "state") {
-			$data=$vm["power-state"];
+			$reply=$vm["power-state"];
 		} else {
-			$data=json_encode($vm);
+			$reply=json_encode($vm);
 		}
 		
 		
@@ -173,5 +176,5 @@
 	}
 	
 	
-	print(json_encode(array("data" => $data)));
+	print($reply);
 ?>
