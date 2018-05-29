@@ -1,5 +1,5 @@
 <?php
-// this script returns a JSON array of VMs with the format:
+// this script creates an array of VMs with the format:
 //   {  
 //      "VCPUs-number":"1",
 //      "uuid":"3848cce7-ad9c-4342-04a5-7c48a99b99fb",
@@ -15,14 +15,16 @@
 //         },
 //         {  
 //            "name":"vif1"
+//            "mac":"",
 //            "ips": ["194.116.124.181"],
 //         }
 //      ]
 //   }
+// and returns it in a format compatible with Zabbix discovery and suitable for item creation
 
 	$vm_name="";
 	$command="";
-	$uuid="";
+	$carry_uuid="";
 	
 	if (isset($argv[1])) {
 	    $vm_name=$argv[1];
@@ -31,7 +33,7 @@
 		$command=$argv[2];
 	}
 	if (isset($argv[3])) {
-		$uuid=$argv[3];
+		$carry_uuid=$argv[3];
 	}
 	
 	$reply="";
@@ -138,8 +140,9 @@
 		}
 	}
 	
-	$data=array();
+	
 	if ($vm_name == "") {
+		$data=array();
 		// generate discovery list of VMs (only name and uuid)
 		foreach($vms as $vm) {
 			$vm_entry=array();
@@ -156,7 +159,7 @@
 			$vm=$vms[0];
 		} else {
 			// create dummy VM for disappearing VM
-			$vm=array("VCPUs-number" => "0", "uuid" => $uuid, "name-label" => $vm_name, "name-description" => "", "power-state" => "deleted", "memory-actual_mb" => "0", "ports" => array() );
+			$vm=array("VCPUs-number" => "0", "uuid" => $carry_uuid, "name-label" => $vm_name, "name-description" => "", "power-state" => "deleted", "memory-actual_mb" => "0", "ports" => array() );
 		}
 		/*
 		$vm_entry=array();
