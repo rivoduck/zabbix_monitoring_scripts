@@ -98,4 +98,5 @@ else
     # errors occourred
     error_exit "${errors}"
 fi
+echo
 
