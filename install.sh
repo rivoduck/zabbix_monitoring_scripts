@@ -50,7 +50,7 @@ else
         which php > /dev/null
         if [ $? -ne 0 ]
         then
-            errors="${errors}Cannot find PHP executable, plese install php-cli"
+            errors="${errors}Cannot find PHP executable, please install php-cli"
             echo "[fail]"
         else
             echo "[OK]"
@@ -61,7 +61,7 @@ else
         which python > /dev/null
         if [ $? -ne 0 ]
         then
-            errors="${errors}Cannot find Python executable, plese install python"
+            errors="${errors}Cannot find Python executable, please install python"
             echo "[fail]"
         else
             echo "[OK]"
