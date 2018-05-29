@@ -3,7 +3,8 @@
 # use this script to update the installation after new code is pulled
 
 ZABBIX_BASE_CONFDIR="/etc/zabbix/"
-ZABBIX_AGENT_CONF_D="zabbix_agentd.conf.d/"
+ZABBIX_AGENT_CONF_D_1="zabbix_agentd.conf.d/"
+ZABBIX_AGENT_CONF_D_2="zabbix_agentd.d/"
 BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 
 NEWLINE=$'\n'
@@ -19,12 +20,17 @@ echo
 
 # check directories and files 
 printf "%-80s" "checking zabbix conf dir"
-if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ]
+if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1} ]
 then
-    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]${NEWLINE}"
-    echo "[fail]"
-    # error_exit "Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D}]" 
+	if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2} ]
+	then
+	    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1}] or [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2}]${NEWLINE}"
+	    echo "[fail]"
+	else
+		ZABBIX_AGENT_CONF_D=${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2}
+		echo "[OK]"
 else
+	ZABBIX_AGENT_CONF_D=${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1}
     echo "[OK]"
 fi
 
