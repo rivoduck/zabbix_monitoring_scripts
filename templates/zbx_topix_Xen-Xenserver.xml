@@ -64,12 +64,12 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>VM status $2</name>
+                            <name>VM uuid $2</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>topix.general.echo[{#VMSTATE},{#VMNAME}]</key>
+                            <key>topix.general.echo[{#VMSTATE},{#VMUUID}]</key>
                             <delay>30</delay>
                             <history>90</history>
                             <trends>0</trends>

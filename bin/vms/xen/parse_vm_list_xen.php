@@ -21,6 +21,12 @@
 //   }
 
 	$vm_name="";
+	$command="";
+	
+	if (isset($argv[2])) {
+		$command=$argv[2];
+	}
+	
 	if (isset($argv[1])) {
 	    $vm_name=$argv[1];
 		
@@ -155,11 +161,11 @@
 	
 	$data=array();
 	if ($vm_name == "") {
-		// generate discovery list of VMs (only name and state)
+		// generate discovery list of VMs (only name and uuid)
 		foreach($vms as $vm) {
 			$vm_entry=array();
 			$vm_entry['{#VMNAME}']=$vm["name-label"];
-			$vm_entry['{#VMSTATE}']=$vm["power-state"];
+			$vm_entry['{#VMUUID}']=$vm["uuid"];
 			
 			$data[]=$vm_entry;
 		}
@@ -171,6 +177,7 @@
 			// create dummy VM for disappearing VM
 			$vm=array("VCPUs-number" => "0", "uuid" => "deleted", "name-label" => $vm_name, "name-description" => "not supported in Xen", "power-state" => "deleted", "memory-actual_mb" => "0", "ports" => array() );
 		}
+		/*
 		$vm_entry=array();
 		$vm_entry['{#VMNAME}']=$vm["name-label"];
 		$vm_entry['{#VMSTATE}']=$vm["power-state"];
@@ -179,8 +186,15 @@
 		$vm_entry['{#VMDESC}']=$vm["name-description"];
 		$vm_entry['{#VMMEM}']=$vm["memory-actual_mb"];
 		$vm_entry['{#VMPORTS}']=$vm["ports"];
+		*/
 		
-		$data=$vm_entry;
+		if ($command == "state") {
+			$data=$vm["power-state"];
+		} else {
+			$data=json_encode($vm);
+		}
+		
+		
 		
 	}
 	
