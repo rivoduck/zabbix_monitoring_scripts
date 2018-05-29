@@ -3,6 +3,7 @@
 current_dir=$(dirname "$0")
 vm_name=$1
 command=$2
+uuid=$3
 
 . ${current_dir}/../functions.sh
 
