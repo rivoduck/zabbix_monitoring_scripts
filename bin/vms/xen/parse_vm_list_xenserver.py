@@ -109,25 +109,26 @@ for line in p.stdout.readlines():
             # split list of IPs by ";"
             networks_arr = networks.split(';')
             for ip_entry in networks_arr:
-                # separate intf string and address
-                ip_arr = ip_entry.split(':')
+                if ip_entry != "":
+                    # separate intf string and address
+                    ip_arr = ip_entry.split(':')
 
-                intf_string=ip_arr.pop(0)
-                # get intf number
-                intf_number=intf_string.split('/')[0].strip()
-                intf_name="vif%s" % intf_number
+                    intf_string=ip_arr.pop(0)
+                    # get intf number
+                    intf_number=intf_string.split('/')[0].strip()
+                    intf_name="vif%s" % intf_number
 
-                # create port entry
-                if not intf_name in ports:
-		    ports[intf_name]={'name': intf_name, 'mac': "", 'ips': []}
+                    # create port entry
+                    if not intf_name in ports:
+                        ports[intf_name]={'name': intf_name, 'mac': "", 'ips': []}
             
-                if len(ip_arr) > 0:
-                    address=ip_arr.pop(0)
-                    for el in ip_arr:
-                        address = "%s:%s" % (address, el)
-                    address=address.strip()
+                    if len(ip_arr) > 0:
+                        address=ip_arr.pop(0)
+                        for el in ip_arr:
+                            address = "%s:%s" % (address, el)
+                        address=address.strip()
 
-                    ports[intf_name]['ips'].append(address)
+                        ports[intf_name]['ips'].append(address)
 
             # convert to list
             ports=ports.values()
