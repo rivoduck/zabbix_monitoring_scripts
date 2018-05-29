@@ -13,6 +13,8 @@ NEWLINE=$'\n'
 
 errors=""
 
+vm_found=0
+
 echo
 
 # check directories and files 
@@ -38,14 +40,12 @@ fi
 
 vm_detect -v
 res=$?
-if [ $res -eq 0 ]
+if [ $res -ne 0 ]
 then
-    errors="${errors}cannot find xm or xe${NEWLINE}"
-    # error_exit "cannot find xm or xe"
-else
     if [ $res -eq 2 ]
     then
         # Xen checks
+        vm_found=1
         printf "%-80s" "checking PHP"
         which php > /dev/null
         if [ $? -ne 0 ]
@@ -57,6 +57,7 @@ else
         fi
 	else
         # XenServer checks
+        vm_found=1
         printf "%-80s" "checking Python"
         which python > /dev/null
         if [ $? -ne 0 ]
@@ -73,7 +74,11 @@ fi
 if [ "X${errors}" == "X" ]
 then
     # install files
-    install_file userparameter_topix.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${ZABBIX_AGENT_CONF_D}
+    install_file userparameter_topix_general.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${ZABBIX_AGENT_CONF_D}
+	if [ $vm_found -eq 1 ]
+	then
+        install_file userparameter_topix_vms.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${ZABBIX_AGENT_CONF_D}
+	fi
 else
     # errors occourred
     error_exit "${errors}"
