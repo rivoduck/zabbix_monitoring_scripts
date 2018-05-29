@@ -73,6 +73,14 @@ then
             errors="${errors}Cannot find Python executable, please install python"
             echo "[fail]"
         else
+			python -c 'import json' > /dev/null 2>&1
+	        if [ $? -ne 0 ]
+	        then
+	            errors="${errors}Python json module not available"
+	            echo "[fail]"
+	        else
+	            echo "[OK]"
+	        fi
             echo "[OK]"
         fi
 		
