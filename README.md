@@ -11,3 +11,8 @@ rpm -Uvh epel-release-5-4.noarch.rpm
 yum install git
 ~~~~
 
+### Cloning repo
+~~~~
+cd /opt/
+git clone https://github.com/rivoduck/zabbix_monitoring_scripts.git
+~~~~
