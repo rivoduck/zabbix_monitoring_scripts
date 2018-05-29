@@ -18,9 +18,9 @@ else
     if [ $res -eq 1 ]
     then
         # XenServer
-        python ${current_dir}/xen/parse_vm_list_xenserver.py $vm_name $command
+        python ${current_dir}/xen/parse_vm_list_xenserver.py $vm_name $command $uuid
     else
         # Xen
-        php ${current_dir}/xen/parse_vm_list_xen.php $vm_name $command
+        php ${current_dir}/xen/parse_vm_list_xen.php $vm_name $command $uuid
     fi
 fi
