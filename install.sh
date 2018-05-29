@@ -81,7 +81,6 @@ then
 	        else
 	            echo "[OK]"
 	        fi
-            echo "[OK]"
         fi
 		
     fi
