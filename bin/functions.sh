@@ -1,7 +1,7 @@
 function error_exit() {
     echo >&2
-    echo "ERRORS:" >&2  
-    echo "$1" >&2  
+    echo "ERRORS:" >&2
+    echo "$1" >&2
     echo >&2
     exit "-1"
 }
@@ -84,3 +84,10 @@ function vm_detect() {
 }
 
 
+# detect storCLI or <other>
+# return values:
+#    0 no sw found
+#    1 storCLI found
+function disk_detect() {
+    #statements
+}
