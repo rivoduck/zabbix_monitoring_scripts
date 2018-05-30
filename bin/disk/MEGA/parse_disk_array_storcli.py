@@ -70,7 +70,7 @@ def disk_analysis(disk_name=None, command=None):
                 if info["State"] == "Onln":
                     disk["state"] = "online"
                 else:
-                    disk["state"] = "notonline"
+                    disk["state"] = "offline"
                 disk["medium"]=info["Med"]
                 disk["interface"]=info["Intf"]
                 disk["model"]=info["Model"]
