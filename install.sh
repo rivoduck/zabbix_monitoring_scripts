@@ -58,7 +58,6 @@ echo
 if [ "${vm_found:-0}" -eq 2 ]
 then
     # Xen checks
-    vm_found=$res
     printf "%-80s" "checking PHP"
     which php > /dev/null
     if [ $? -ne 0 ]
@@ -73,7 +72,6 @@ fi
 if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 ]]
 then
     # XenServer or Mega Raid checks
-    vm_found=$res
     printf "%-80s" "checking Python"
     which python > /dev/null
     if [ $? -ne 0 ]
