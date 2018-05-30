@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-05-29T13:28:38Z</date>
+    <date>2018-05-30T09:46:46Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -12,9 +12,9 @@
     </groups>
     <templates>
         <template>
-            <template>Template Top-IX Xen_XenServer</template>
-            <name>Template Top-IX Xen_XenServer</name>
-            <description/>
+            <template>Template Top-IX Virtualization</template>
+            <name>Template Top-IX Virtualization</name>
+            <description>Get VM info from Xen and XenServer</description>
             <groups>
                 <group>
                     <name>Templates</name>
