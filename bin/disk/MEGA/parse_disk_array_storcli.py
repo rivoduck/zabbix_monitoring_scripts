@@ -40,13 +40,13 @@ def disk_analysis(disk_name=None, command=None):
             data = json.loads(out.decode("utf-8"))
             controller = data["Controllers"][0]
             command_status = controller["Command Status"]["Status"]
-            if command_status == "Failure":
+            if command_status == "Failure" or len(controller["Response Data"]["Drive {}".format(disk_name)]) == 0:
                 disk = {
                     "State": controller["Command Status"]["Detailed Status"][0]["Status"],
                     "ErrMsg": controller["Command Status"]["Detailed Status"][0]["ErrMsg"]
                 }
             else:
-                disk = controller["Response Data"]["Drive {}".format(disk_name)]
+                disk = controller["Response Data"]["Drive {}".format(disk_name)][0]
         except Exception as e:
             print(e)
             exit(-1)
@@ -55,8 +55,8 @@ def disk_analysis(disk_name=None, command=None):
             reply = disk['State']
         else:
             # return whole disk
-            reply = disk
-        return json.dumps(reply)
+            reply = json.dumps(disk)
+        return reply
     else:
         # start array discovery process
         cmd = ["storcli"]
@@ -76,7 +76,7 @@ def disk_analysis(disk_name=None, command=None):
             physical_drives = controller["Response Data"]["PD LIST"]
             for drive in physical_drives:
                 eid, slot = drive["EID:Slt"].split(":")
-                drive_name = "c{}/e{}/s{}".format(controller_number, eid, slot)
+                drive_name = "/c{}/e{}/s{}".format(controller_number, eid, slot)
                 reply.append({
                     '{#DISKNAME}': drive_name
                 })
@@ -84,7 +84,7 @@ def disk_analysis(disk_name=None, command=None):
             print(e)
             exit(-1)
 
-            return json.dumps({'data': reply})
+        return json.dumps({'data': reply})
 
 
 disk_name = ""
