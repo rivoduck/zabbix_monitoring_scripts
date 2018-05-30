@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-05-30T09:46:20Z</date>
+    <date>2018-05-30T10:36:03Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -35,7 +35,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>topix.disks.discover</key>
+                    <key>topix.disks.discovery</key>
                     <delay>3600</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -69,7 +69,7 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>topix.disks.discover[{#DISKNAME},state]</key>
+                            <key>topix.disks.discovery[{#DISKNAME},state]</key>
                             <delay>30</delay>
                             <history>90</history>
                             <trends>0</trends>
@@ -113,7 +113,7 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>topix.disks.discover[{#DISKNAME}]</key>
+                            <key>topix.disks.discovery[{#DISKNAME}]</key>
                             <delay>30</delay>
                             <history>90</history>
                             <trends>0</trends>
@@ -152,7 +152,24 @@
                             <application_prototypes/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes/>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},state].str(&quot;Onln&quot;)}=0</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>RAID array problem for disk {#DISKNAME}</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                    </trigger_prototypes>
                     <graph_prototypes/>
                     <host_prototypes/>
                 </discovery_rule>
