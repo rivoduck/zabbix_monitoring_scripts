@@ -49,7 +49,10 @@ def disk_analysis(disk_name=None, command=None):
                 disk = controller["Response Data"]["Drive {}".format(disk_name)][0]
         except Exception as e:
             print(e)
-            exit(-1)
+            disk = {
+                "State": "Deleted",
+                "ErrMsg": "Disk not found"
+            }
         if command == 'state':
             # return state of specified disck
             reply = disk['State']
