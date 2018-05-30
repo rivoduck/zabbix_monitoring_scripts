@@ -9,6 +9,7 @@ Script for monitoring Xen/XenServer Dom0 and more
 wget http://archives.fedoraproject.org/pub/archive/epel/5/x86_64/epel-release-5-4.noarch.rpm
 rpm -Uvh epel-release-5-4.noarch.rpm
 yum install git
+rpm -ev epel-release
 ~~~~
 
 ### Cloning repo
