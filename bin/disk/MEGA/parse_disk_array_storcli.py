@@ -25,17 +25,26 @@ def _run_cmd(cmd):
 def disk_analysis(disk_name=None, command=None):
     """Return Raid array Status."""
     reply = []
-    if disk_name:
-        # check a specific disk in raid array
-        cmd = ["storcli"]
+    out = ""
+    
+    cmd = ["storcli"]
+    if disk_name and disk_name != '':
         cmd += [disk_name]
-        cmd += ["show"]
-        cmd += ["all"]
-        cmd += ["J"]
-        try:
-            out = _run_cmd(cmd)
-        except Exception as e:
-            exit(-1)
+    else:
+        cmd += ["/c0"]
+    cmd += ["show"]
+    cmd += ["all"]
+    cmd += ["J"]
+    try:
+        out = _run_cmd(cmd)
+        
+    except Exception as e:
+        exit(-1)
+        
+        
+        
+    if disk_name and disk_name != '':
+        # check a specific disk in raid array
         try:
             data = json.loads(out.decode("utf-8"))
             controller = data["Controllers"][0]
@@ -49,7 +58,7 @@ def disk_analysis(disk_name=None, command=None):
                 disk = controller["Response Data"]["Drive {}".format(disk_name)][0]
         except Exception as e:
             disk = {
-                "State": "Deleted",
+                "State": "NotFound",
                 "ErrMsg": "Disk not found"
             }
         if command == 'state':
@@ -61,15 +70,6 @@ def disk_analysis(disk_name=None, command=None):
         return reply
     else:
         # start array discovery process
-        cmd = ["storcli"]
-        cmd += ["/c0"]
-        cmd += ["show"]
-        cmd += ["all"]
-        cmd += ["J"]
-        try:
-            out = _run_cmd(cmd)
-        except Exception as e:
-            exit(-1)
         try:
             data = json.loads(out.decode("utf-8"))
             controller = data["Controllers"][0]
@@ -82,7 +82,8 @@ def disk_analysis(disk_name=None, command=None):
                     '{#DISKNAME}': drive_name
                 })
         except Exception as e:
-            exit(-1)
+            # in case of exception return empty discovery list
+            pass
 
         return json.dumps({'data': reply})
 
