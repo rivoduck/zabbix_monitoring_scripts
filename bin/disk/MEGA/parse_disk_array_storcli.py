@@ -45,28 +45,59 @@ def disk_analysis(disk_name=None, command=None):
         
     if disk_name and disk_name != '':
         # check a specific disk in raid array
+        disk = {
+            "state": "unknown",
+            "medium": "unknown",
+            "interface": "unknown",
+            "model": "unknown",
+            "predictivefailcount": 0,
+            "smartstate": "unknown",
+            "message": ""
+        }
         try:
             data = json.loads(out.decode("utf-8"))
             controller = data["Controllers"][0]
             command_status = controller["Command Status"]["Status"]
-            if command_status == "Failure" or len(controller["Response Data"]["Drive {}".format(disk_name)]) == 0:
-                disk = {
-                    "State": controller["Command Status"]["Detailed Status"][0]["Status"],
-                    "ErrMsg": controller["Command Status"]["Detailed Status"][0]["ErrMsg"]
-                }
+            
+            if command_status != "Success" or len(controller["Response Data"]["Drive {}".format(disk_name)]) == 0:
+                # problems getting data about drive
+                disk["state"]="problem"
+                disk["message"] = controller["Command Status"]["Detailed Status"][0]["ErrMsg"]
             else:
-                disk = controller["Response Data"]["Drive {}".format(disk_name)][0]
+                # got data from command
+                # get state, medium, interface, model
+                info=controller["Response Data"]["Drive {}".format(disk_name)][0]
+                if info["State"] == "Onln":
+                    disk["state"] = "online"
+                else:
+                    disk["state"] = "notonline"
+                disk["medium"]=info["Med"]
+                disk["interface"]=info["Intf"]
+                disk["model"]=info["Model"]
+                
+                # get predictive Failure Count and SMART state
+                info_det=controller["Response Data"]["Drive {} - Detailed Information".format(disk_name)]["Drive {} State".format(disk_name)]
+                disk["predictivefailcount"]=int(info_det["Predictive Failure Count"])
+                if info_det["S.M.A.R.T alert flagged by drive"] != "No":
+                    disk["smartstate"] = "fail"
+                else:
+                    disk["smartstate"] = "OK"
+                
         except Exception as e:
-            disk = {
-                "State": "NotFound",
-                "ErrMsg": "Disk not found"
-            }
+            disk["state"] = "notfound"
+            disk["message"] = "disk {} not found".format(disk_name)
+            
         if command == 'state':
-            # return state of specified disck
-            reply = disk['State']
+            # return state of specified disk
+            reply = disk['state']
+        elif command == 'predictivefailcount':
+            reply = disk['predictivefailcount']
+        elif command == 'smartstate':
+            reply = disk['smartstate']
         else:
             # return whole disk
             reply = json.dumps(disk)
+            
         return reply
     else:
         # start array discovery process
