@@ -55,7 +55,7 @@ disk_found=$?
 
 
 echo 
-if [ "$vm_found" -eq 2 ]
+if [ "${vm_found:-0}" -eq 2 ]
 then
     # Xen checks
     vm_found=$res
@@ -70,7 +70,7 @@ then
     fi
 fi
 
-if [[ "$vm_found" -eq 1 || "$disk_found" -eq 1 ]]
+if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 ]]
 then
     # XenServer or Mega Raid checks
     vm_found=$res
@@ -98,11 +98,11 @@ if [ "X${errors}" == "X" ]
 then
     # install files
     install_file topix_general.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
-	if [ "$vm_found" -ne 0 ]
+	if [ "${vm_found:-0}" -ne 0 ]
 	then
         install_file topix_vms.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
 	fi
-	if [ "$disk_found" -ne 0 ]
+	if [ "${disk_found:-0}" -ne 0 ]
 	then
         install_file topix_disks.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
 	fi
