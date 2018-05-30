@@ -12,6 +12,22 @@ yum install git
 rpm -ev epel-release
 ~~~~
 
+### Configuring IPtables
+
+~~~~
+vi /etc/sysconfig/iptables
+~~~~
+add line (before REJECT)
+~~~~
+# Zabbix-Agent
+-A RH-Firewall-1-INPUT -m conntrack --ctstate NEW -m tcp -p tcp --dport 10050 -j ACCEPT
+~~~~
+restart iptables
+~~~~
+systemctl stop iptables
+systemctl start iptables
+~~~~
+
 ### Cloning repo
 ~~~~
 cd /opt/
