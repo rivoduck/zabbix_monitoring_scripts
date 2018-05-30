@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-05-21T16:23:42Z</date>
+    <date>2018-05-30T13:47:54Z</date>
     <groups>
         <group>
             <name>Templates</name>
+        </group>
+        <group>
+            <name>Top-IX templates</name>
         </group>
     </groups>
     <templates>
@@ -15,6 +18,9 @@
             <groups>
                 <group>
                     <name>Templates</name>
+                </group>
+                <group>
+                    <name>Top-IX templates</name>
                 </group>
             </groups>
             <applications>
@@ -348,9 +354,6 @@
                     <inventory_link>0</inventory_link>
                     <applications>
                         <application>
-                            <name>CPU</name>
-                        </application>
-                        <application>
                             <name>Performance</name>
                         </application>
                     </applications>
@@ -394,9 +397,6 @@
                     <inventory_link>0</inventory_link>
                     <applications>
                         <application>
-                            <name>CPU</name>
-                        </application>
-                        <application>
                             <name>Performance</name>
                         </application>
                     </applications>
@@ -439,9 +439,6 @@
                     <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
                     <inventory_link>0</inventory_link>
                     <applications>
-                        <application>
-                            <name>CPU</name>
-                        </application>
                         <application>
                             <name>Performance</name>
                         </application>
@@ -1578,7 +1575,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>topix.general.echo[{#FSTYPE},{#FSNAME}]</key>
-                            <delay>30</delay>
+                            <delay>1800</delay>
                             <history>90</history>
                             <trends>0</trends>
                             <status>0</status>
@@ -1622,7 +1619,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vfs.fs.inode[{#FSNAME},pfree]</key>
-                            <delay>60</delay>
+                            <delay>900</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1666,7 +1663,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vfs.fs.size[{#FSNAME},free]</key>
-                            <delay>60</delay>
+                            <delay>900</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>1</status>
@@ -1710,7 +1707,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vfs.fs.size[{#FSNAME},pfree]</key>
-                            <delay>60</delay>
+                            <delay>900</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1798,7 +1795,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vfs.fs.size[{#FSNAME},used]</key>
-                            <delay>60</delay>
+                            <delay>900</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>1</status>
