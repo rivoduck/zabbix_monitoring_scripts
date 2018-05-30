@@ -89,5 +89,23 @@ function vm_detect() {
 #    0 no sw found
 #    1 storCLI found
 function disk_detect() {
-    #statements
+    if [ "X$1" == "X-v" ]
+    then
+        printf "%-80s" "checking Raid array type"
+    fi
+    which storcli > /dev/null
+    if [ $? -eq 0 ]
+    then
+        if [ "X$1" == "X-v" ]
+        then
+            echo "[Mega]"
+        fi
+        return 1
+    else
+        if [ "X$1" == "X-v" ]
+        then
+            echo "[cannot find]"
+        fi
+        return 0
+    fi
 }

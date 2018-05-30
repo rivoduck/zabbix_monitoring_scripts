@@ -16,6 +16,7 @@ NEWLINE=$'\n'
 errors=""
 
 vm_found=0
+disk_found=0
 
 echo
 
@@ -47,52 +48,61 @@ else
 fi
 
 vm_detect -v
-res=$?
-if [ $res -ne 0 ]
+vm_found=$?
+
+disk_detect -v
+disk_found=$?
+
+if [ $vm_found -eq 2 ]
 then
-    if [ $res -eq 2 ]
+    # Xen checks
+    vm_found=$res
+    printf "%-80s" "checking PHP"
+    which php > /dev/null
+    if [ $? -ne 0 ]
     then
-        # Xen checks
-        vm_found=1
-        printf "%-80s" "checking PHP"
-        which php > /dev/null
+        errors="${errors}Cannot find PHP executable, please install php-cli"
+        echo "[fail]"
+    else
+        echo "[OK]"
+    fi
+fi
+
+if ( [ $vm_found -eq 1 ] || [ $disk_found -eq 1 ] )
+then
+    # XenServer or Mega Raid checks
+    vm_found=$res
+    printf "%-80s" "checking Python"
+    which python > /dev/null
+    if [ $? -ne 0 ]
+    then
+        errors="${errors}Cannot find Python executable, please install python"
+        echo "[fail]"
+    else
+		python -c 'import json' > /dev/null 2>&1
         if [ $? -ne 0 ]
         then
-            errors="${errors}Cannot find PHP executable, please install php-cli"
+            errors="${errors}Python json module not available"
             echo "[fail]"
         else
             echo "[OK]"
         fi
-	else
-        # XenServer checks
-        vm_found=1
-        printf "%-80s" "checking Python"
-        which python > /dev/null
-        if [ $? -ne 0 ]
-        then
-            errors="${errors}Cannot find Python executable, please install python"
-            echo "[fail]"
-        else
-			python -c 'import json' > /dev/null 2>&1
-	        if [ $? -ne 0 ]
-	        then
-	            errors="${errors}Python json module not available"
-	            echo "[fail]"
-	        else
-	            echo "[OK]"
-	        fi
-        fi
-		
     fi
 fi
+
+
 
 if [ "X${errors}" == "X" ]
 then
     # install files
     install_file topix_general.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
-	if [ $vm_found -eq 1 ]
+	if [ $vm_found -ne 0 ]
 	then
         install_file topix_vms.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
+	fi
+	if [ $disk_found -ne 0 ]
+	then
+        install_file topix_disks.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
 	fi
 else
     # errors occourred
