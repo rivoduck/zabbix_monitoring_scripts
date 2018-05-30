@@ -16,7 +16,8 @@ def _run_cmd(cmd):
         raise ValueError(err_msg)
 
     if err is not None and err.strip():
-        print("storCLI succeeded but an error was printed when executing '{}': {}".format(" ".join(cmd), err.strip()))
+        err_msg = "storCLI succeeded but an error was printed when executing '{}': {}".format(" ".join(cmd), err.strip())
+        raise ValueError(err_msg)
 
     return out
 
@@ -34,7 +35,6 @@ def disk_analysis(disk_name=None, command=None):
         try:
             out = _run_cmd(cmd)
         except Exception as e:
-            print(e)
             exit(-1)
         try:
             data = json.loads(out.decode("utf-8"))
@@ -48,7 +48,6 @@ def disk_analysis(disk_name=None, command=None):
             else:
                 disk = controller["Response Data"]["Drive {}".format(disk_name)][0]
         except Exception as e:
-            print(e)
             disk = {
                 "State": "Deleted",
                 "ErrMsg": "Disk not found"
@@ -70,7 +69,6 @@ def disk_analysis(disk_name=None, command=None):
         try:
             out = _run_cmd(cmd)
         except Exception as e:
-            print(e)
             exit(-1)
         try:
             data = json.loads(out.decode("utf-8"))
@@ -84,7 +82,6 @@ def disk_analysis(disk_name=None, command=None):
                     '{#DISKNAME}': drive_name
                 })
         except Exception as e:
-            print(e)
             exit(-1)
 
         return json.dumps({'data': reply})
