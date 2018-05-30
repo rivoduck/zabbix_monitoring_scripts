@@ -68,7 +68,7 @@ then
     fi
 fi
 
-if ( [ $vm_found -eq 1 ] || [ $disk_found -eq 1 ] )
+if [[ $vm_found -eq 1 || $disk_found -eq 1 ]]
 then
     # XenServer or Mega Raid checks
     vm_found=$res
