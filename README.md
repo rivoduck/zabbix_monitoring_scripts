@@ -40,7 +40,7 @@ vi /etc/zabbix/zabbix_agentd.conf
 ~~~~~
 modificare:
 ~~~~~
-	Server=cloud-zabbix1.top-ix.org
+	Server=host.domain
 	TLSConnect=psk
 	TLSAccept=psk
 	TLSPSKIdentity=<unique_id>
