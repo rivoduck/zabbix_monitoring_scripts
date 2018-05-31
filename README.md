@@ -28,6 +28,27 @@ systemctl stop iptables
 systemctl start iptables
 ~~~~
 
+### Configure Zabbix Agent to use PSK (pre-shared key)
+generate a PSK:
+~~~~
+sh -c "openssl rand -hex 32 > /etc/zabbix/zabbix_agentd.psk"
+~~~~
+
+aggiungere PSK alla configurazione dell'agente
+~~~~~
+vi /etc/zabbix/zabbix_agentd.conf
+~~~~~
+modificare:
+~~~~~
+	Server=cloud-zabbix1.top-ix.org
+	TLSConnect=psk
+	TLSAccept=psk
+	TLSPSKIdentity=<unique_id>
+	TLSPSKFile=/etc/zabbix/zabbix_agentd.psk
+~~~~~
+
+configurare la stessa chiave/identità in zabbix
+
 ### Cloning repo
 ~~~~
 cd /opt/
