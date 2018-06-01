@@ -40,11 +40,11 @@ vi /etc/zabbix/zabbix_agentd.conf
 ~~~~~
 modificare:
 ~~~~~
-	Server=host.domain
-	TLSConnect=psk
-	TLSAccept=psk
-	TLSPSKIdentity=<unique_id>
-	TLSPSKFile=/etc/zabbix/zabbix_agentd.psk
+Server=host.domain
+TLSConnect=psk
+TLSAccept=psk
+TLSPSKIdentity=<unique_id>
+TLSPSKFile=/etc/zabbix/zabbix_agentd.psk
 ~~~~~
 
 configurare la stessa chiave/identità in zabbix
