@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-05-30T13:48:26Z</date>
+    <date>2018-06-04T06:59:16Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -245,7 +245,7 @@
                             <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},state].str(&quot;online&quot;)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>RAID array problem for disk {#DISKNAME}</name>
+                            <name>RAID disk {#DISKNAME} problem on {HOST.NAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -258,26 +258,10 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},predictivefailcount].last()}&gt;0</expression>
-                            <recovery_mode>0</recovery_mode>
-                            <recovery_expression/>
-                            <name>RAID predictive failure problem for disk {#DISKNAME}</name>
-                            <correlation_mode>0</correlation_mode>
-                            <correlation_tag/>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                            <manual_close>0</manual_close>
-                            <dependencies/>
-                            <tags/>
-                        </trigger_prototype>
-                        <trigger_prototype>
                             <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},smartstate].str(&quot;OK&quot;)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>RAID SMART status problem for disk {#DISKNAME}</name>
+                            <name>RAID SMART status problem for disk {#DISKNAME} on {HOST.NAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
