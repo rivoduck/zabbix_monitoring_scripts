@@ -74,10 +74,10 @@ def disk_analysis(disk_name=None, command=None):
                 disk["medium"]=info["Med"]
                 disk["interface"]=info["Intf"]
                 disk["model"]=info["Model"]
+                disk["size_gb"]=int(info["Size"])
                 
                 # get predictive Failure Count and SMART state
                 info_det=controller["Response Data"]["Drive {} - Detailed Information".format(disk_name)]["Drive {} State".format(disk_name)]
-                disk["predictivefailcount"]=int(info_det["Predictive Failure Count"])
                 if info_det["S.M.A.R.T alert flagged by drive"] != "No":
                     disk["smartstate"] = "fail"
                 else:
@@ -90,8 +90,6 @@ def disk_analysis(disk_name=None, command=None):
         if command == 'state':
             # return state of specified disk
             reply = disk['state']
-        elif command == 'predictivefailcount':
-            reply = disk['predictivefailcount']
         elif command == 'smartstate':
             reply = disk['smartstate']
         else:
