@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-06-04T09:32:16Z</date>
+    <date>2018-06-04T10:09:40Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -201,7 +201,7 @@
                             <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},state].str(&quot;online&quot;)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>RAID disk {#DISKNAME} problem on {HOST.NAME}</name>
+                            <name>RAID disk {#DISKNAME} not online on {HOST.NAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
