@@ -50,7 +50,7 @@ def disk_analysis(disk_name=None, command=None):
             "medium": "unknown",
             "interface": "unknown",
             "model": "unknown",
-            "size_gb": "unknown",
+            "size": "unknown",
             "smartstate": "unknown",
             "message": ""
         }
@@ -74,10 +74,7 @@ def disk_analysis(disk_name=None, command=None):
                 disk["medium"]=info["Med"]
                 disk["interface"]=info["Intf"]
                 disk["model"]=info["Model"]
-                # get the first number is the Size attribute
-                size_arr=info["Size"].split('.')
-                if len(size_arr) > 0:
-                    disk["size_gb"]=size_arr[0]
+                disk["size"]=info["Size"]
                 
                 # get predictive Failure Count and SMART state
                 info_det=controller["Response Data"]["Drive {} - Detailed Information".format(disk_name)]["Drive {} State".format(disk_name)]
