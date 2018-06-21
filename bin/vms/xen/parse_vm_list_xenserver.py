@@ -49,7 +49,7 @@ if len(sys.argv) > 3:
 
 exec_command = 'xe vm-list params=uuid,name-label,name-description,power-state,memory-static-max,VCPUs-max,networks'
 if vm_name and vm_name != "":
-    exec_command = "%s name-label=%s" % (exec_command, vm_name)
+    exec_command = '%s name-label="%s"' % (exec_command, vm_name)
 
 p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
 
