@@ -54,3 +54,10 @@ configurare la stessa chiave/identità in zabbix
 cd /opt/
 git clone https://github.com/rivoduck/zabbix_monitoring_scripts.git
 ~~~~
+
+
+### Install StorCLI
+for intel RAID controllers
+~~~~
+https://downloadcenter.intel.com/download/27654/StorCLI-Standalone-Utility
+~~~~
