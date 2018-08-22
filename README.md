@@ -55,6 +55,17 @@ cd /opt/
 git clone https://github.com/rivoduck/zabbix_monitoring_scripts.git
 ~~~~
 
+### Install scripts
+~~~~
+cd /opt/zabbix_monitoring_scripts
+./install.sh
+~~~~
+commentare la linea
+~~~~
+Defaults    requiretty
+~~~~
+nel file /etc/sudoers
+
 
 ### Install StorCLI
 for intel RAID controllers
