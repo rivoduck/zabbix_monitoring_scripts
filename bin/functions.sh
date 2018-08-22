@@ -56,7 +56,7 @@ function vm_detect() {
     then
         printf "%-80s" "checking Virtualizer type"
     fi
-    which xe > /dev/null
+    which xe > /dev/null 2>&1
     if [ $? -eq 0 ]
     then
         if [ "X$1" == "X-v" ]
@@ -65,7 +65,7 @@ function vm_detect() {
         fi
         return 1
     else
-        which xm > /dev/null
+        which xm > /dev/null 2>&1
         if [ $? -eq 0 ]
         then
             if [ "X$1" == "X-v" ]
@@ -94,7 +94,7 @@ function disk_detect() {
     then
         printf "%-80s" "checking Raid array type"
     fi
-    which storcli > /dev/null
+    which storcli > /dev/null 2>&1
     if [ $? -eq 0 ]
     then
         if [ "X$1" == "X-v" ]
@@ -103,7 +103,7 @@ function disk_detect() {
         fi
         return 1
     fi
-    which perccli > /dev/null
+    which perccli > /dev/null 2>&1
     if [ $? -eq 0 ]
     then
         if [ "X$1" == "X-v" ]

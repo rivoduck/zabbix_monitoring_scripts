@@ -59,7 +59,7 @@ if [ "${vm_found:-0}" -eq 2 ]
 then
     # Xen checks
     printf "%-80s" "checking PHP"
-    which php > /dev/null
+    which php > /dev/null 2>&1
     if [ $? -ne 0 ]
     then
         errors="${errors}Cannot find PHP executable, please install php-cli"
@@ -73,7 +73,7 @@ if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 || "${disk_found:-0}" -
 then
     # XenServer or Mega Raid checks
     printf "%-80s" "checking Python"
-    which python > /dev/null
+    which python > /dev/null 2>&1
     if [ $? -ne 0 ]
     then
         errors="${errors}Cannot find Python executable, please install python"
