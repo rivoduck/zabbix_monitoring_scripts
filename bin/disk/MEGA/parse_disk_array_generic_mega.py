@@ -22,12 +22,12 @@ def _run_cmd(cmd):
     return out
 
 
-def disk_analysis(disk_name=None, command=None):
+def disk_analysis(exec_name, disk_name=None, command=None):
     """Return Raid array Status."""
     reply = []
     out = ""
     
-    cmd = ["storcli"]
+    cmd = [ exec_name ]
     if disk_name and disk_name != '':
         cmd += [disk_name]
     else:
@@ -121,8 +121,11 @@ disk_name = ""
 command = ""
 
 if len(sys.argv) > 1:
-    disk_name = sys.argv[1]
-if len(sys.argv) > 2:
-    command = sys.argv[2]
+    executable_name = sys.argv[1]
 
-print disk_analysis(disk_name, command)
+if len(sys.argv) > 2:
+    disk_name = sys.argv[2]
+if len(sys.argv) > 3:
+    command = sys.argv[3]
+
+print disk_analysis(executable_name, disk_name, command)

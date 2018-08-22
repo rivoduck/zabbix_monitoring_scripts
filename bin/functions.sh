@@ -84,10 +84,11 @@ function vm_detect() {
 }
 
 
-# detect storCLI or <other>
+# detect RAID management tool
 # return values:
 #    0 no sw found
-#    1 storCLI found
+#    1 MegaRAID storCLI found
+#    2 MegaRAID percCLI found
 function disk_detect() {
     if [ "X$1" == "X-v" ]
     then
@@ -98,14 +99,24 @@ function disk_detect() {
     then
         if [ "X$1" == "X-v" ]
         then
-            echo "[Mega]"
+            echo "[Mega (stocli)]"
         fi
         return 1
-    else
+    fi
+    which perccli > /dev/null
+    if [ $? -eq 0 ]
+    then
         if [ "X$1" == "X-v" ]
         then
-            echo "[cannot find]"
+            echo "[Mega (perccli)]"
         fi
-        return 0
+        return 2
     fi
+
+    # no RAID tool found
+    if [ "X$1" == "X-v" ]
+    then
+        echo "[cannot find]"
+    fi
+    return 0
 }

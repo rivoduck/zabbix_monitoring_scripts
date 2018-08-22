@@ -69,7 +69,7 @@ then
     fi
 fi
 
-if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 ]]
+if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 || "${disk_found:-0}" -eq 2 ]]
 then
     # XenServer or Mega Raid checks
     printf "%-80s" "checking Python"
