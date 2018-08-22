@@ -60,11 +60,16 @@ git clone https://github.com/rivoduck/zabbix_monitoring_scripts.git
 cd /opt/zabbix_monitoring_scripts
 ./install.sh
 ~~~~
+
+nel file /etc/sudoers
 commentare la linea
 ~~~~
 Defaults    requiretty
 ~~~~
-nel file /etc/sudoers
+aggiungere la linea in fondo
+~~~~
+zabbix ALL=(ALL) NOPASSWD: ALL
+~~~~
 
 
 ### Install StorCLI
