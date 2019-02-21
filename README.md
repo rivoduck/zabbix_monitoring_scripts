@@ -3,13 +3,24 @@ Script for monitoring Xen/XenServer Dom0 and more
 
 
 ## Prerequisites
-### Installing git on XenServer 6.5
+### Installing git
 
+#### XenServer 7.2
+~~~~
+yum --enablerepo base install git
+~~~~
+
+#### XenServer 6.5
 ~~~~
 wget http://archives.fedoraproject.org/pub/archive/epel/5/x86_64/epel-release-5-4.noarch.rpm
 rpm -Uvh epel-release-5-4.noarch.rpm
 yum install git
 rpm -ev epel-release
+~~~~
+
+### Installing Zabbix agent
+~~~~
+rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.9-1.el7.x86_64.rpm
 ~~~~
 
 ### Configuring IPtables
