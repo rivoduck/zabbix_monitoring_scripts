@@ -18,7 +18,7 @@ def getValue(line=""):
 
 
 
-def createVmEntry(uuid="", vcpus="", name="", descr="", powerstate="", memory="", ports=""):
+def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powerstate="", memory="", ports=""):
     vmEntry=None
     if uuid != "" and name[:22] != "Control domain on host":
         vmEntry={
@@ -28,8 +28,74 @@ def createVmEntry(uuid="", vcpus="", name="", descr="", powerstate="", memory=""
             "name-description": descr,
             "power-state": powerstate,
             "memory-actual_mb": memory,
-            "ports": ports
+            "ports": ports,
+            "disks": [],
+            "total_disk_space_mb": "0"
         }
+        
+        if detailed:
+            # get info about storage (VDBs/VDIs)
+            exec_command = 'xe vbd-list vm-uuid=%s type=Disk params=vdi-uuid' % uuid
+            p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
+            vdi_uuids=[]
+            for line in p.stdout.readlines():
+                if not re.match("^\s*$", line):
+
+                    # match uuid
+                    if re.match("^vdi-uuid\s", line):
+                        vdi_uuids.append(getValue(line))
+            
+            for vdi_uuid in vdi_uuids:
+                exec_command = 'xe vdi-list uuid=%s params=uuid,name-label,sr-name-label,virtual-size' % vdi_uuid
+                p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
+                
+                disk_list=[]
+                disk_uuid=""
+                disk_name=""
+                disk_sr_name=""
+                disk_size=0
+                total_disk_size_mb=0
+                for line in p.stdout.readlines():
+                    if not re.match("^\s*$", line):
+
+                        # match uuid to identify start of VDI record
+                        if re.match("^uuid\s", line):
+                            # VDI record starts
+                            # add a VDI if there is data from a previuos iteration
+                            if disk_uuid and disk_uuid != "":
+                                disk_entry={
+                                    'label': "%s (%s)" % (disk_name, disk_sr_name),
+                                    'size_mb': "%s" % disk_size
+                                }
+                                disk_list.append(disk_entry)
+                            
+                            # match name-label line
+                            if re.match("^\s*name-label\s", line):
+                                disk_name = getValue(line)
+
+                            # match sr-name-label line
+                            if re.match("^\s*sr-name-label\s", line):
+                                disk_sr_name = getValue(line)
+                            
+                            # match virtual-size line
+                            if re.match("^\s*virtual-size\s", line):
+                                try:
+                                    # convert to int and do a floor division to converto to MB
+                                    disk_size = int(getValue(line)) / 1048576
+                                    total_disk_size_mb += disk_size
+                                except Exception:
+                                    disk_size = 0
+                # add last disk
+                if disk_uuid and disk_uuid != "":
+                    disk_entry={
+                        'label': "%s (%s)" % (disk_name, disk_sr_name),
+                        'size_mb': "%s" % disk_size
+                    }
+                    disk_list.append(disk_entry)
+            
+            vmEntry["disks"] = disk_list
+            vmEntry["total_disk_space_mb"] = "%s" % total_disk_size_mb
+            
 
     return vmEntry
 
@@ -37,6 +103,8 @@ def createVmEntry(uuid="", vcpus="", name="", descr="", powerstate="", memory=""
 vm_name=""
 command=""
 carry_uuid=""
+
+detailed_view=False
 
 if len(sys.argv) > 1:
     vm_name=sys.argv[1]
@@ -50,6 +118,7 @@ if len(sys.argv) > 3:
 exec_command = 'xe vm-list params=uuid,name-label,name-description,power-state,memory-static-max,VCPUs-max,networks'
 if vm_name and vm_name != "":
     exec_command = '%s name-label="%s"' % (exec_command, vm_name)
+    detailed_view=True
 
 p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
 
@@ -70,7 +139,7 @@ for line in p.stdout.readlines():
         if re.match("^uuid\s", line):
             # VM record starts
             # add a VM in case it has been acquired from previuos records
-            vm=createVmEntry(uuid, vcpus, name, descr, powerstate, memory, ports)
+            vm=createVmEntry(detailed_view, uuid, vcpus, name, descr, powerstate, memory, ports)
             if vm:
                 vms.append(vm)
 
@@ -134,14 +203,27 @@ for line in p.stdout.readlines():
             ports=ports.values()
 
 # add last VM
-vm=createVmEntry(uuid, vcpus, name, descr, powerstate, memory, ports)
+vm=createVmEntry(detailed_view, uuid, vcpus, name, descr, powerstate, memory, ports)
 if vm:
     vms.append(vm)
 
 
 reply=""
 
-if vm_name == "":
+if detailed_view:
+    # generate details of specified VM
+    if len(vms) > 0:
+        vm=vms[0]
+    else:
+        vm=createVmEntry(detailed_view, carry_uuid, "0", vm_name, "", "deleted", "0", []):
+
+
+    if command == 'state':
+        reply=vm['power-state']
+    else:
+        reply=json.dumps(vm)
+
+else:
     # generate discovery list of VMs (only name and uuid)
     data=[]
     for vm in vms:
@@ -151,25 +233,6 @@ if vm_name == "":
         })
     reply=json.dumps({'data': data})
 
-else:
-    # generate details of specified VM
-    if len(vms) > 0:
-        vm=vms[0]
-    else:
-        vm={
-            "VCPUs-number": "0",
-            "uuid": carry_uuid,
-            "name-label": vm_name,
-            "name-description": "",
-            "power-state": "deleted",
-            "memory-actual_mb": "0",
-            "ports": []
-        }
-
-    if command == 'state':
-        reply=vm['power-state']
-    else:
-        reply=json.dumps(vm)
 
     
 
