@@ -8,7 +8,13 @@
 # Variabili da definire
 
 
-. ./config_backupvms
+. /opt/zabbix_monitoring_scripts/backup_scripts/config_backupvms
+
+if [ -z $local_mountpoint ]
+then
+	echo "impossible leggere il file di configurazione, verificare che il pacchetto sia installatio sotto /opt/"
+	exit -1
+fi
 
 if [ $# -eq 0 ]
 then
@@ -36,7 +42,7 @@ TIPO=$1
 
 DATA=`date +%Y-%m-%d-%H:%M`
 SERVER=`echo $HOSTNAME`
-mkdir -p $local_montpoint
+mkdir -p $local_mountpoint
 MAIL=/tmp/mail-$DATA.txt
 
 echo "To: $destinatari" > $MAIL
@@ -56,15 +62,15 @@ logDebug="logger -t ${loggerTag} -s -p ${loggerFacility}.debug"
 
 # verifica che la cartella dello storage sia montata, scrivibile e abbia lo spazio sufficiente per i backup
 
-folderumount=$(mount|grep $local_montpoint)
+folderumount=$(mount|grep $local_mountpoint)
 
 if [ "$folderumount" == "" ]
 then
-        umount $local_montpoint
-        mount -F $SHARE $local_montpoint -o nfsvers=3 
+        umount $local_mountpoint
+        mount -F $SHARE $local_mountpoint -o nfsvers=3 
 fi
   
-folderumount=$(mount|grep $local_montpoint)
+folderumount=$(mount|grep $local_mountpoint)
                 
 if [ "$folderumount" == "" ]
 then
@@ -74,9 +80,9 @@ then
         exit 1;
 fi
   
-spaziolibero=$(df -P $local_montpoint|grep $local_montpoint| awk '{print $4}')
+spaziolibero=$(df -P $local_mountpoint|grep $local_mountpoint| awk '{print $4}')
                         
-test -w $local_montpoint/fileprovamount-scrittura || { ${logCritical} "Cartella dei backup non montata correttamente"; exit 1; }
+test -w $local_mountpoint/fileprovamount-scrittura || { ${logCritical} "Cartella dei backup non montata correttamente"; exit 1; }
 
 if [  $spaziolibero -lt $spaziominimoStorage ]
 then
@@ -90,7 +96,7 @@ fi
 ### Mounting remote nfs share backup drive
 
 
-BACKUPPATH=$local_montpoint/$TIPO
+BACKUPPATH=$local_mountpoint/$TIPO
 mkdir -p $BACKUPPATH
 [ ! -d $BACKUPPATH ]  && { ${logCritical} "Cartella dei backup non montata correttamente"; echo -e "Backup Fallito!\nCartella dei backup non montata correttamente!" >> $MAIL ; /usr/sbin/ssmtp $destinatari < $MAIL ; exit 1; }
 
@@ -151,7 +157,7 @@ echo "Fine backup $TIPO macchine di $SERVER alle ore $FINEORE del $FINEDATA" >> 
 
 rm /tmp/mail-$DATA.txt
 
-umount $local_montpoint
+umount $local_mountpoint
 
 
 if [ ! -z $TRAP_ZABBIX_HOST ] && [ ! -z $TRAP_HOST ]

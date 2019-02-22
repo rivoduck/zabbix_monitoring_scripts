@@ -8,7 +8,7 @@
 # Variabili da definire
 
 spaziominimoStorage="1000000000"
-local_montpoint="/backup"
+local_mountpoint="/backup"
 SHARE='192.168.182.9:/vol/topix/backup-cloud'
 destinatari='cloud-alert@top-ix.org'
 numerobackup_mensile="2"
