@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-05-30T13:47:54Z</date>
+    <date>2019-02-22T10:26:43Z</date>
     <groups>
         <group>
-            <name>Templates</name>
-        </group>
-        <group>
-            <name>Top-IX templates</name>
+            <name>Templates-Topix</name>
         </group>
     </groups>
     <templates>
@@ -17,10 +14,7 @@
             <description/>
             <groups>
                 <group>
-                    <name>Templates</name>
-                </group>
-                <group>
-                    <name>Top-IX templates</name>
+                    <name>Templates-Topix</name>
                 </group>
             </groups>
             <applications>
@@ -63,7 +57,7 @@
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -106,7 +100,7 @@
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -149,7 +143,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -192,7 +186,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -235,7 +229,7 @@
                     <delay>600</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>unixtime</units>
@@ -281,7 +275,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>ips</units>
@@ -456,7 +450,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>sps</units>
@@ -502,7 +496,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -548,7 +542,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -594,7 +588,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -640,7 +634,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -686,7 +680,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -732,7 +726,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -778,7 +772,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -824,7 +818,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -870,7 +864,7 @@
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>0</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>1</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -916,7 +910,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>unixtime</units>
@@ -962,7 +956,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>B</units>
@@ -1005,7 +999,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>%</units>
@@ -1048,7 +1042,7 @@
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>B</units>
@@ -1091,7 +1085,7 @@
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>0</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>1</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -1137,7 +1131,7 @@
                     <delay>600</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>uptime</units>
@@ -1183,7 +1177,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -1272,7 +1266,7 @@
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>B</units>
@@ -1315,7 +1309,7 @@
                     <delay>3600</delay>
                     <history>7</history>
                     <trends>365</trends>
-                    <status>1</status>
+                    <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>B</units>
@@ -1835,10 +1829,10 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template Top-IX OS Linux:vfs.fs.size[{#FSNAME},pfree].last(0)}&lt;20</expression>
+                            <expression>{Template Top-IX OS Linux:vfs.fs.size[{#FSNAME},pfree].last(0)}&lt;10</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>Free disk space is less than 20% on volume {#FSNAME}</name>
+                            <name>Free disk space is less than 10% on volume {#FSNAME} on {HOST.NAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -1854,7 +1848,7 @@
                             <expression>{Template Top-IX OS Linux:vfs.fs.inode[{#FSNAME},pfree].last(0)}&lt;20</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>Free inodes is less than 20% on volume {#FSNAME}</name>
+                            <name>Free inodes is less than 20% on volume {#FSNAME} on {HOST.NAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -2473,6 +2467,38 @@
                     <item>
                         <host>Template Top-IX OS Linux</host>
                         <key>system.cpu.util[,idle]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Disk I/O wait</name>
+            <width>900</width>
+            <height>200</height>
+            <yaxismin>0.0000</yaxismin>
+            <yaxismax>100.0000</yaxismax>
+            <show_work_period>1</show_work_period>
+            <show_triggers>1</show_triggers>
+            <type>0</type>
+            <show_legend>1</show_legend>
+            <show_3d>0</show_3d>
+            <percent_left>0.0000</percent_left>
+            <percent_right>0.0000</percent_right>
+            <ymin_type_1>0</ymin_type_1>
+            <ymax_type_1>0</ymax_type_1>
+            <ymin_item_1>0</ymin_item_1>
+            <ymax_item_1>0</ymax_item_1>
+            <graph_items>
+                <graph_item>
+                    <sortorder>0</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>1A7C11</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>Template Top-IX OS Linux</host>
+                        <key>system.cpu.util[,iowait]</key>
                     </item>
                 </graph_item>
             </graph_items>
