@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Written By: Gabriele Rocca
+# Created date: 03-11-2015
+# Version: 1.0
+#
+
+# Variabili da definire
+
+spaziominimoStorage="1000000000"
+local_montpoint="/backup"
+SHARE='192.168.182.9:/vol/topix/backup-cloud'
+destinatari='cloud-alert@top-ix.org'
+numerobackup_mensile="2"
+numerobackup_settimanale="3"
+
+# invia una trap a zabbix usando zabbix_sender dopo che il backup si conclude (nessuna info su successo, commentare per disabilitare)
+#TRAP_ZABBIX_HOST='zabbix02.cloudix' # Hostname or IP address of Zabbix server
+#TRAP_HOST='topix-backend01.cloudix' # host name the item belongs to (as registered in Zabbix frontend)

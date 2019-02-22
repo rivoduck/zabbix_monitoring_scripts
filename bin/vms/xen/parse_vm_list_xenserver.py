@@ -65,7 +65,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                             if disk_uuid and disk_uuid != "":
                                 disk_entry={
                                     'label': "%s (%s)" % (disk_name, disk_sr_name),
-                                    'size_mb': "%s" % disk_size
+                                    'size-mb': "%s" % disk_size
                                 }
                                 disk_list.append(disk_entry)
                             
@@ -89,12 +89,12 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                 if disk_uuid and disk_uuid != "":
                     disk_entry={
                         'label': "%s (%s)" % (disk_name, disk_sr_name),
-                        'size_mb': "%s" % disk_size
+                        'size-mb': "%s" % disk_size
                     }
                     disk_list.append(disk_entry)
             
             vmEntry["disks"] = disk_list
-            vmEntry["total_disk_space_mb"] = "%s" % total_disk_size_mb
+            vmEntry["total-disk-space-mb"] = "%s" % total_disk_size_mb
             
 
     return vmEntry
