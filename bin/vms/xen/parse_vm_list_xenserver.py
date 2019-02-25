@@ -28,10 +28,10 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
             "name-description": descr,
             "power-state": powerstate,
             "memory-actual_mb": memory,
-            "vnc_port": "",
+            "vnc-port": "",
             "ports": ports,
             "disks": [],
-            "total_disk_space_mb": "0"
+            "total-disk-space_mb": "0"
         }
         
         if detailed:
@@ -98,7 +98,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                     disk_list.append(disk_entry)
             
             vmEntry["disks"] = disk_list
-            vmEntry["total-disk-space-mb"] = "%s" % total_disk_size_mb
+            vmEntry["total-disk-space_mb"] = "%s" % total_disk_size_mb
             
             # get VNC port for console
             vnc_port=""
@@ -109,7 +109,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                 lines=p.stdout.readlines()
                 if len(lines) > 0:
                     vnc_port=lines[0].strip()
-            vmEntry["vnc_port"] = vnc_port
+            vmEntry["vnc-port"] = vnc_port
 
     return vmEntry
 
