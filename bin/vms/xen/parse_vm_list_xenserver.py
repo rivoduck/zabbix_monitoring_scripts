@@ -215,7 +215,7 @@ if detailed_view:
     if len(vms) > 0:
         vm=vms[0]
     else:
-        vm=createVmEntry(detailed_view, carry_uuid, "0", vm_name, "", "deleted", "0", []):
+        vm=createVmEntry(detailed_view, carry_uuid, "0", vm_name, "", "deleted", "0", [])
 
 
     if command == 'state':
