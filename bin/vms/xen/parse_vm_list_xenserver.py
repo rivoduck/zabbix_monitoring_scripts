@@ -107,7 +107,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                 
                 lines=p.stdout.readlines()
                 if len(lines) > 0:
-                    vnc_port=lines[0]
+                    vnc_port=lines[0].strip()
             vmEntry["vnc_port"] = vnc_port
 
     return vmEntry
