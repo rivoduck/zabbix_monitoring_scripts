@@ -18,7 +18,7 @@ def getValue(line=""):
 
 
 
-def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powerstate="", memory="", ports=""):
+def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powerstate="", memory="", ports="", dom_id=""):
     vmEntry=None
     if uuid != "" and name[:22] != "Control domain on host":
         vmEntry={
@@ -99,6 +99,16 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
             vmEntry["disks"] = disk_list
             vmEntry["total-disk-space-mb"] = "%s" % total_disk_size_mb
             
+            # get VNC port for console
+            vnc_port=""
+            if dom_id and dom_id != "":
+                exec_command = 'xenstore read /local/domain/%s/console/vnc-port' % dom_id
+                p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
+                
+                lines=p.stdout.readlines()
+                if len(lines) > 0:
+                    vnc_port=lines[0]
+            vmEntry["vnc_port"] = vnc_port
 
     return vmEntry
 
@@ -118,7 +128,7 @@ if len(sys.argv) > 3:
 
 
 
-exec_command = 'xe vm-list params=uuid,name-label,name-description,power-state,memory-static-max,VCPUs-max,networks'
+exec_command = 'xe vm-list params=uuid,dom-id,name-label,name-description,power-state,memory-static-max,VCPUs-max,networks'
 if vm_name and vm_name != "":
     exec_command = '%s name-label="%s"' % (exec_command, vm_name)
     detailed_view=True
@@ -130,6 +140,7 @@ vcpus=""
 name=""
 descr=""
 powerstate=""
+dom_id=""
 memory=""
 ports=""
 
@@ -142,7 +153,7 @@ for line in p.stdout.readlines():
         if re.match("^uuid\s", line):
             # VM record starts
             # add a VM in case it has been acquired from previuos records
-            vm=createVmEntry(detailed_view, uuid, vcpus, name, descr, powerstate, memory, ports)
+            vm=createVmEntry(detailed_view, uuid, vcpus, name, descr, powerstate, memory, ports, dom_id)
             if vm:
                 vms.append(vm)
 
@@ -171,6 +182,10 @@ for line in p.stdout.readlines():
         # match VCPUs-max line
         if re.match("^\s*VCPUs-max\s", line):
             vcpus = getValue(line)
+
+        # match dom-id line
+        if re.match("^\s*dom-id\s", line):
+            dom_id = getValue(line)
 
         # match networks line
         # line looks like "0/ip: 194.116.76.130; 0/ipv6/0: fe80::d063:25ff:fe1d:7f79; 1/ip: 10.45.0.11; 1/ipv6/0: fe80::ac62:9dff:fed7:9e83"
@@ -206,7 +221,7 @@ for line in p.stdout.readlines():
             ports=ports.values()
 
 # add last VM
-vm=createVmEntry(detailed_view, uuid, vcpus, name, descr, powerstate, memory, ports)
+vm=createVmEntry(detailed_view, uuid, vcpus, name, descr, powerstate, memory, ports, dom_id)
 if vm:
     vms.append(vm)
 
