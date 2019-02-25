@@ -28,6 +28,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
             "name-description": descr,
             "power-state": powerstate,
             "memory-actual_mb": memory,
+            "vnc_port": "",
             "ports": ports,
             "disks": [],
             "total_disk_space_mb": "0"
