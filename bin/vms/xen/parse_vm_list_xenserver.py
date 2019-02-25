@@ -68,6 +68,9 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                                     'size-mb': "%s" % disk_size
                                 }
                                 disk_list.append(disk_entry)
+                                # acquire disk UUID
+                                disk_uuid = getValue(line)
+                                
                             
                             # match name-label line
                             if re.match("^\s*name-label\s", line):
