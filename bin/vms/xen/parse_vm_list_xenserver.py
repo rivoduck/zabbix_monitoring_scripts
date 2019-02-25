@@ -68,26 +68,26 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                                     'size-mb': "%s" % disk_size
                                 }
                                 disk_list.append(disk_entry)
-                                # acquire disk UUID
-                                disk_uuid = getValue(line)
+                            # acquire disk UUID
+                            disk_uuid = getValue(line)
                                 
                             
-                            # match name-label line
-                            if re.match("^\s*name-label\s", line):
-                                disk_name = getValue(line)
+                        # match name-label line
+                        if re.match("^\s*name-label\s", line):
+                            disk_name = getValue(line)
 
-                            # match sr-name-label line
-                            if re.match("^\s*sr-name-label\s", line):
-                                disk_sr_name = getValue(line)
-                            
-                            # match virtual-size line
-                            if re.match("^\s*virtual-size\s", line):
-                                try:
-                                    # convert to int and do a floor division to converto to MB
-                                    disk_size = int(getValue(line)) / 1048576
-                                    total_disk_size_mb += disk_size
-                                except Exception:
-                                    disk_size = 0
+                        # match sr-name-label line
+                        if re.match("^\s*sr-name-label\s", line):
+                            disk_sr_name = getValue(line)
+                        
+                        # match virtual-size line
+                        if re.match("^\s*virtual-size\s", line):
+                            try:
+                                # convert to int and do a floor division to converto to MB
+                                disk_size = int(getValue(line)) / 1048576
+                                total_disk_size_mb += disk_size
+                            except Exception:
+                                disk_size = 0
                 # add last disk
                 if disk_uuid and disk_uuid != "":
                     disk_entry={
