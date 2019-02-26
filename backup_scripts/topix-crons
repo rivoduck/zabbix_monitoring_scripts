@@ -11,6 +11,8 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 #0 17 * * * root /opt/zabbix_monitoring_scripts/backup_scripts/snapshot_all_vms.sh > /dev/null 2>&1
-0 8 * * sun root /opt/zabbix_monitoring_scripts/backup_scripts/backupvms.sh settimanale > /dev/null 2>&1
-0 20 8-14 * * root [ "$(date '+\%a')" == "Sun" ] && /opt/zabbix_monitoring_scripts/backup_scripts/backupvms.sh mansile > /dev/null 2>&1
+
+# lo script viene lanciato ogni giorno ma esegue il backup solo nel giorno indicato nel file di configurazione
+# la prima occorrenza del mese del giorno indicato (tra l'1 e il 7) il backup viene eseguito come mensile
+0 6 * * * root /opt/zabbix_monitoring_scripts/backup_scripts/backupvms.sh > /dev/null 2>&1
 

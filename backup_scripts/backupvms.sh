@@ -7,36 +7,49 @@
 
 # Variabili da definire
 
+CONFIG='/opt/zabbix_monitoring_scripts/backup_scripts/config_backupvms'
 
-. /opt/zabbix_monitoring_scripts/backup_scripts/config_backupvms
+. $CONFIG
+
+TIPO='oggi niente backup'
 
 if [ -z $local_mountpoint ]
 then
-	echo "impossible leggere il file di configurazione, verificare che il pacchetto sia installatio sotto /opt/"
+	echo "impossible leggere il file di configurazione ${CONFIG}, verificare che il pacchetto sia installato sotto /opt/"
 	exit -1
 fi
 
-if [ $# -eq 0 ]
+if [ "X${1}" == 'Xsettimanale' ] || [ "X${1}" == 'Xmensile' ]
 then
-    echo "Specificare tipo di backup $0 <mensile|settimanale>"
-	exit -1
-fi
-
-if [ $1 == "mensile" ]
-then
-	numerobackup=$numerobackup_mensile
+	# forza backup indipendentemente dal file di configurazione
+	TIPO=$1
 else
-	if [ $1 == "settimanale" ]
+	if [ "$(date '+%a')" == $giorno_di_backup ]
 	then
-		numerobackup=$numerobackup_settimanale
-	else
-	    echo "Specificare tipo di backup $0 <mensile|settimanale>"
-		exit -1
+		if [ "$(date '+%d')" -ge 1 ] && [ "$(date '+%d')" -le 7 ]
+		then
+			# primo giorno di backup del mese, eseguire un backup mensile
+			TIPO='mensile'
+		else
+			TIPO='settimanale'
+		fi
 	fi
 fi
 
 
-TIPO=$1
+if [ "$TIPO" == "mensile" ]
+then
+	numerobackup=$numerobackup_mensile
+else
+	if [ "$TIPO" == "settimanale" ]
+	then
+		numerobackup=$numerobackup_settimanale
+	else
+	    echo "oggi non e' giorno di backup (vedi ${CONFIG})"
+	    echo "usare $0 settimanale o $0 mensile per forzare il backup adesso"
+		exit 0
+	fi
+fi
 
 
 

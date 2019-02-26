@@ -5,7 +5,13 @@
 # Version: 1.0
 #
 
-# Variabili da definire
+# lo script deve venir lanciato ogni giorno
+# il backup viene esguito nel giorno definito in questo file di configurazione
+
+
+# giorno in cui eseguire il backup settimanale, se il giorno cade tra 1-7 del mese allora viene eseguito un backup mensile
+# indicare Mon Tue Wed Thu Fri Sat Sun
+giorno_di_backup='Sun'
 
 spaziominimoStorage="1000000000"
 local_mountpoint="/backup"
