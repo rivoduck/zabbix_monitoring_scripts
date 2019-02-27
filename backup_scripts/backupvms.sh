@@ -135,7 +135,8 @@ do
     echo "$?"
     xe template-param-set is-a-template=false ha-always-run=false uuid=$SNAPUUID
     echo "$?"
-    xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$DATA.xva"
+	# lancia l'export dello snapshot usando nice e ionice per dare bassa priorita' al processo sia per la CPU che per l'IO
+    nice -n 19 ionice -c2 -n7 -t xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$DATA.xva"
     echo "$?"
     xe vm-uninstall uuid=$SNAPUUID force=true
     echo "$?"	
