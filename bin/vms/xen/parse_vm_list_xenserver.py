@@ -29,7 +29,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
             "power-state": powerstate,
             "memory-actual_mb": memory,
             "vnc-port": "",
-            "ports": ports,
+            "ports": [],
             "disks": [],
             "total-disk-space_mb": "0"
         }
@@ -99,6 +99,71 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
             
             vmEntry["disks"] = disk_list
             vmEntry["total-disk-space_mb"] = "%s" % total_disk_size_mb
+            
+            # get info about Virtual Networn Interfaces (VIF)
+            exec_command = 'xe vm-vif-list uuid=%s params=uuid,device,MAC,network-name-label' % uuid
+            p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
+            
+            vif_uuid=""
+            vif_descr=""
+            vif_dev=""
+            vif_mac=""
+            port_list=[]
+            for line in p.stdout.readlines():
+                if not re.match("^\s*$", line):
+
+                    # match uuid to identify start of VIF record
+                    if re.match("^uuid\s", line):
+                        # VIF record starts
+                        # add a VIF if there is data from a previuos iteration
+                        if vif_uuid and vif_uuid != "":
+                            vif_name="vif%s" % vif_dev
+                            vif_entry={
+                                'descr': vif_descr,
+                                'name': vif_name,
+                                'mac': vif_mac,
+                                'ips': []
+                            }
+                            # check if VIF is already in the list with IPs
+                            for port in ports:
+                                if port['name'] == vif_entry['name']:
+                                    vif_entry['ips']=port['ips']
+                                    break
+                            port_list.append(vif_entry)
+                        # acquire vif UUID
+                        vif_uuid = getValue(line)
+                    
+                    # match device number line
+                    if re.match("^\s*device\s", line):
+                        vif_dev = getValue(line)
+                    
+                    # match network-name-label line
+                    if re.match("^\s*network-name-label\s", line):
+                        vif_descr = getValue(line)
+                    
+                    # match MAC line
+                    if re.match("^\s*MAC\s", line):
+                        vif_mac = getValue(line)
+                        
+            # add last port
+            if vif_uuid and vif_uuid != "":
+                vif_name="vif%s" % vif_dev
+                vif_entry={
+                    'descr': vif_descr,
+                    'name': vif_name,
+                    'mac': vif_mac,
+                    'ips': []
+                }
+                # check if VIF is already in the list with IPs
+                for port in ports:
+                    if port['name'] == vif_entry['name']:
+                        vif_entry['ips']=port['ips']
+                        break
+                port_list.append(vif_entry)
+                
+                
+                        
+            vmEntry["ports"] = port_list
             
             # get VNC port for console
             vnc_port=""
@@ -208,7 +273,7 @@ for line in p.stdout.readlines():
 
                     # create port entry
                     if not intf_name in ports:
-                        ports[intf_name]={'name': intf_name, 'mac': "", 'ips': []}
+                        ports[intf_name]={'name': intf_name, 'mac': "", 'descr': "", 'ips': []}
             
                     if len(ip_arr) > 0:
                         address=ip_arr.pop(0)
