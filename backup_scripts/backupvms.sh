@@ -115,7 +115,7 @@ mkdir -p $BACKUPPATH
 
 VMUUIDS=''
 # Fetching list UUIDs of all VMs running on XenServer
-VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false | grep uuid | cut -d":" -f2| sed 's/^ *//g')
+VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false power-state=running | grep uuid | cut -d":" -f2| sed 's/^ *//g')
 INIZIOORE=`date +%k:%M`
 INIZIODATA=`date +%d-%m-%Y`
 echo -e "Inizio backup $TIPO macchine di $SERVER alle ore $INIZIOORE del $INIZIODATA \n" >> $MAIL
