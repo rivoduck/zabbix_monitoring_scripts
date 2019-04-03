@@ -169,7 +169,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
             
             reply = json.dumps(reply)
         
-    return json.dumps(reply)
+    return reply
     
 
 
