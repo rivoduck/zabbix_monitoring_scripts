@@ -3,7 +3,7 @@ import subprocess
 import json
 import sys
 import re
-
+from copy import deepcopy
 
 
 
@@ -26,7 +26,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
             "smartstate": "unknown",
             "message": ""
         }
-        disk = reset_disk
+        disk = deepcopy(reset_disk)
         cur_controller = None
         cur_enclosure_id = 0 # this is hardcoded, TODO: run an aditional command to find the enclosure id
         cur_slot = None
@@ -59,7 +59,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                             '{#DISKNAME}': cur_diskname
                         })
                     # reset values
-                    disk=reset_disk
+                    disk=deepcopy(reset_disk)
                     cur_diskname=None
                     cur_slot = None
                 
@@ -150,7 +150,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
             disk_found=True
 
         if not disk_found:
-            disk=reset_disk
+            disk=deepcopy(reset_disk)
             disk["state"] = "notfound"
             disk["message"] = "disk {} not found".format(disk_name)
             
