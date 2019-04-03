@@ -84,7 +84,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 try:
                     temp=line_arr[1].strip()
                     temp_arr = temp.split(' ')
-                    disk['interface'] = "%s %s" % (temp_arr[0], temp_arr[1])
+                    disk['size'] = "%s %s" % (temp_arr[0], temp_arr[1])
                 except Exception:
                     pass
                 
