@@ -58,10 +58,10 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                         reply.append({
                             '{#DISKNAME}': cur_diskname
                         })
-                # reset values
-                disk=reset_disk
-                cur_diskname=None
-                cur_slot = None
+                    # reset values
+                    disk=reset_disk
+                    cur_diskname=None
+                    cur_slot = None
                 
                 
                 
