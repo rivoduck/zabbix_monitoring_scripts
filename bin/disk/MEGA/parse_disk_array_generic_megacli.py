@@ -108,9 +108,9 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                     temp = line_arr[1].strip()
                     temp_arr = temp.split(',')
                     if temp_arr[0] == "Online," or temp_arr[0] == "Online":
-                        disk['status'] = 'online'
+                        disk['state'] = 'online'
                     else:
-                        disk['status'] = 'offline'
+                        disk['state'] = 'offline'
                 except Exception:
                     pass
 
@@ -121,9 +121,9 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 try:
                     temp = line_arr[1].strip()
                     if temp == "No":
-                        disk['medium'] = 'OK'
+                        disk['smartstate'] = 'OK'
                     else:
-                        disk['medium'] = 'fail'
+                        disk['smartstate'] = 'fail'
                 except Exception:
                     pass
             
