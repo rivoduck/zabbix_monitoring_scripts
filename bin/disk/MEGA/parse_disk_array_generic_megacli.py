@@ -144,10 +144,16 @@ def disk_analysis(exec_name, disk_name=None, command=None):
     
     if disk_name:
         # disk details
-        if not disk_found and disk_name != cur_diskname:
+
+        # check last disk
+        if disk_name == cur_diskname:
+            disk_found=True
+
+        if not disk_found:
             disk=reset_disk
             disk["state"] = "notfound"
             disk["message"] = "disk {} not found".format(disk_name)
+            
         if command == 'state':
             # return state of specified disk
             reply = disk['state']
@@ -155,8 +161,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
             reply = disk['smartstate']
         else:
             # return whole disk
-            reply = disk
-            reply = json.dumps(reply)
+            reply = json.dumps(disk)
     else:
         # disk discovery
         
@@ -166,9 +171,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 '{#DISKNAME}': cur_diskname
             })
         
-            reply = {'data': reply}
-            
-            reply = json.dumps(reply)
+            reply = json.dumps({'data': reply})
         
     return reply
     
