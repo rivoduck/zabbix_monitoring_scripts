@@ -1,25 +1,9 @@
+from subprocess import Popen, PIPE, STDOUT
 import subprocess
 import json
 import sys
 
 
-def _run_cmd(cmd):
-    proc = subprocess.Popen(cmd,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    out, err = proc.communicate()
-
-    if proc.returncode != 0:
-        err_msg = "megacli exit code is {}".format(proc.returncode)
-        if err is not None and err.strip():
-            err_msg += ", stderr: {}".format(err)
-        raise ValueError(err_msg)
-
-    if err is not None and err.strip():
-        err_msg = "megacli succeeded but an error was printed when executing '{}': {}".format(" ".join(cmd), err.strip())
-        raise ValueError(err_msg)
-
-    return out
 
 
 def disk_analysis(exec_name, disk_name=None, command=None):
