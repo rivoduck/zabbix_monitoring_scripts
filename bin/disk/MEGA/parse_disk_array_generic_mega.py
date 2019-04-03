@@ -31,7 +31,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
     if disk_name and disk_name != '':
         cmd += [disk_name]
     else:
-        cmd += ["/c0"]
+        cmd += ["/c0"] # TODO: controller is hardcoded to 0
     cmd += ["show"]
     cmd += ["all"]
     cmd += ["J"]

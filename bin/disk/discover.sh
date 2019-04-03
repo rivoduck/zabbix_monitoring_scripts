@@ -24,4 +24,9 @@ else
         # percCLI
         python ${current_dir}/MEGA/parse_disk_array_generic_mega.py perccli "$disk_name" $command
     fi
+    if [ $res -eq 3 ]
+    then
+        # megacli
+        python ${current_dir}/MEGA/parse_disk_array_generic_megacli.py megacli "$disk_name" $command
+    fi
 fi

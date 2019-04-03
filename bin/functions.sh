@@ -112,11 +112,20 @@ function disk_detect() {
         fi
         return 2
     fi
+    which megacli > /dev/null 2>&1
+    if [ $? -eq 0 ]
+    then
+        if [ "X$1" == "X-v" ]
+        then
+            echo "[Mega (megacli)]"
+        fi
+        return 3
+    fi
 
     # no RAID tool found
     if [ "X$1" == "X-v" ]
     then
-        echo "[cannot find]"
+        echo "[cannot find, looking for commands storcli, perccli, megacli]"
     fi
     return 0
 }
