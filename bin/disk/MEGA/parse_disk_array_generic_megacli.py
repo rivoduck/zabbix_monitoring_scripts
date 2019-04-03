@@ -81,70 +81,70 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 
             # identify line Slot Number: 
             if re.match("^Slot Number: ", line):
-            line_arr = line.split(':')
-            try:
-                cur_slot = line_arr[1].strip()
-            except Exception:
-                pass
+                line_arr = line.split(':')
+                try:
+                    cur_slot = line_arr[1].strip()
+                except Exception:
+                    pass
                 
                 
             # identify line PD Type: 
             if re.match("^PD Type: ", line):
-            line_arr = line.split(':')
-            try:
-                disk['interface'] = line_arr[1].strip()
-            except Exception:
-                pass
+                line_arr = line.split(':')
+                try:
+                    disk['interface'] = line_arr[1].strip()
+                except Exception:
+                    pass
                 
                 
             # identify line Raw Size: 
             if re.match("^Raw Size: ", line):
-            line_arr = line.split(':')
-            try:
-                temp=line_arr[1].strip()
-                temp_arr = temp.split(' ')
-                disk['interface'] = "%s %s" % (temp_arr[0], temp_arr[1])
-            except Exception:
-                pass
+                line_arr = line.split(':')
+                try:
+                    temp=line_arr[1].strip()
+                    temp_arr = temp.split(' ')
+                    disk['interface'] = "%s %s" % (temp_arr[0], temp_arr[1])
+                except Exception:
+                    pass
                 
             # identify line Media Type: 
             if re.match("^Media Type: ", line):
-            line_arr = line.split(':')
-            try:
-                temp = line_arr[1].strip()
-                if temp == "Solid State Device":
-                    disk['medium'] = 'SSD'
-                else:
-                    disk['medium'] = temp
-            except Exception:
-                pass
+                line_arr = line.split(':')
+                try:
+                    temp = line_arr[1].strip()
+                    if temp == "Solid State Device":
+                        disk['medium'] = 'SSD'
+                    else:
+                        disk['medium'] = temp
+                except Exception:
+                    pass
                 
 
             # identify line Firmware state: 
             if re.match("^Firmware state: ", line):
-            line_arr = line.split(':')
-            try:
-                temp = line_arr[1].strip()
-                temp_arr = temp.split(',')
-                if temp_arr[0] == "Online," or temp_arr[0] == "Online":
-                    disk['status'] = 'online'
-                else:
-                    disk['status'] = 'offline'
-            except Exception:
-                pass
+                line_arr = line.split(':')
+                try:
+                    temp = line_arr[1].strip()
+                    temp_arr = temp.split(',')
+                    if temp_arr[0] == "Online," or temp_arr[0] == "Online":
+                        disk['status'] = 'online'
+                    else:
+                        disk['status'] = 'offline'
+                except Exception:
+                    pass
 
                 
             # identify line S.M.A.R.T. alert: 
             if re.match("^Drive has flagged a S.M.A.R.T alert : ", line):
-            line_arr = line.split(':')
-            try:
-                temp = line_arr[1].strip()
-                if temp == "No":
-                    disk['medium'] = 'OK'
-                else:
-                    disk['medium'] = 'fail'
-            except Exception:
-                pass
+                line_arr = line.split(':')
+                try:
+                    temp = line_arr[1].strip()
+                    if temp == "No":
+                        disk['medium'] = 'OK'
+                    else:
+                        disk['medium'] = 'fail'
+                except Exception:
+                    pass
             
             
             # define disk name
