@@ -2,6 +2,7 @@ from subprocess import Popen, PIPE, STDOUT
 import subprocess
 import json
 import sys
+import re
 
 
 
@@ -131,6 +132,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 cur_diskname = "/c%s/e%s/s%s" % (cur_controller, cur_enclosure_id, cur_slot)
             
     except Exception as e:
+        print e
         exit(-1)
     
     
