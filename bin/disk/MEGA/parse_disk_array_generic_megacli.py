@@ -39,7 +39,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
             if re.match("^Adapter #", line):
                 line_arr = line.split('#')
                 try:
-                    cur_controller = line_arr[1]
+                    cur_controller = line_arr[1].strip()
                 except Exception:
                     pass
                     
@@ -54,9 +54,10 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 
                 else:
                     # return list of disks
-                    reply.append({
-                        '{#DISKNAME}': cur_diskname
-                    })
+                    if cur_diskname:
+                        reply.append({
+                            '{#DISKNAME}': cur_diskname
+                        })
                 
                 
             # identify line Slot Number: 
@@ -154,6 +155,13 @@ def disk_analysis(exec_name, disk_name=None, command=None):
             cur_slot = None
     else:
         # disk discovery
+        
+        # add last disk
+        if cur_diskname:
+            reply.append({
+                '{#DISKNAME}': cur_diskname
+            })
+        
         reply = {'data': reply}
         
     return json.dumps(reply)
