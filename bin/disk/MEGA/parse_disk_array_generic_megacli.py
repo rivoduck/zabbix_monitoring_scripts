@@ -11,12 +11,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
     reply = []
     out = ""
     
-    cmd = [ exec_name ]
-    if disk_name and disk_name != '':
-        cmd += [disk_name]
-    else:
-        cmd += ["-PDList"]
-    cmd += [" -aALL"]
+    cmd = "%s -PDList -aALL" % exec_name
     try:
         p = Popen(cmd, shell=True, stdout=PIPE, stderr=STDOUT)
         
