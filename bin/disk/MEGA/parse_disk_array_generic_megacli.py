@@ -145,6 +145,7 @@ def disk_analysis(exec_name, disk_name=None, command=None):
     if disk_name:
         # disk details
         if not disk_found and disk_name != cur_diskname:
+            disk=reset_disk
             disk["state"] = "notfound"
             disk["message"] = "disk {} not found".format(disk_name)
         if command == 'state':
