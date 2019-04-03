@@ -58,6 +58,11 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                         reply.append({
                             '{#DISKNAME}': cur_diskname
                         })
+                # reset values
+                disk=reset_disk
+                cur_diskname=None
+                cur_slot = None
+                
                 
                 
             # identify line Slot Number: 
@@ -148,11 +153,9 @@ def disk_analysis(exec_name, disk_name=None, command=None):
         elif command == 'smartstate':
             reply = disk['smartstate']
         else:
-            # return whole disk and reset cur_ values
-            reply = json.dumps(disk)
-            disk=reset_disk
-            cur_diskname=None
-            cur_slot = None
+            # return whole disk
+            reply = disk
+            reply = json.dumps(reply)
     else:
         # disk discovery
         
@@ -162,7 +165,9 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                 '{#DISKNAME}': cur_diskname
             })
         
-        reply = {'data': reply}
+            reply = {'data': reply}
+            
+            reply = json.dumps(reply)
         
     return json.dumps(reply)
     
