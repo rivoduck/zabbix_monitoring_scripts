@@ -46,11 +46,11 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                     if re.match("^vdi-uuid\s", line):
                         vdi_uuids.append(getValue(line))
             
+            disk_list=[]
             for vdi_uuid in vdi_uuids:
                 exec_command = 'xe vdi-list uuid=%s params=uuid,name-label,sr-name-label,virtual-size' % vdi_uuid
                 p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
                 
-                disk_list=[]
                 disk_uuid=""
                 disk_name=""
                 disk_sr_name=""
