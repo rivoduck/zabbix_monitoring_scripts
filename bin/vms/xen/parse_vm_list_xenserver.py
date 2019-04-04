@@ -47,6 +47,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                         vdi_uuids.append(getValue(line))
             
             disk_list=[]
+            total_disk_size_mb=0
             for vdi_uuid in vdi_uuids:
                 exec_command = 'xe vdi-list uuid=%s params=uuid,name-label,sr-name-label,virtual-size' % vdi_uuid
                 p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
@@ -55,7 +56,6 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                 disk_name=""
                 disk_sr_name=""
                 disk_size=0
-                total_disk_size_mb=0
                 for line in p.stdout.readlines():
                     if not re.match("^\s*$", line):
 
