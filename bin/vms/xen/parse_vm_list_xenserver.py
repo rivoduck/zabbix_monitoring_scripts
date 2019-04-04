@@ -166,8 +166,8 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
             vmEntry["ports"] = port_list
             
             # get VNC port for console
-            vnc_port=""
-            if dom_id and dom_id != "":
+            vnc_port="n/a"
+            if dom_id and dom_id != "" and dom_id != "-1":
                 exec_command = 'xenstore read /local/domain/%s/console/vnc-port' % dom_id
                 p = Popen(exec_command, shell=True, stdout=PIPE, stderr=STDOUT)
                 
