@@ -114,6 +114,8 @@ def disk_analysis(exec_name, disk_name=None, command=None):
                     temp_arr = temp.split(',')
                     if temp_arr[0] == "Online," or temp_arr[0] == "Online":
                         disk['state'] = 'online'
+                    elif temp_arr[0] == "Hotspare," or temp_arr[0] == "Hotspare":
+                        disk['state'] = 'spare'
                     else:
                         disk['state'] = 'offline'
                 except Exception:

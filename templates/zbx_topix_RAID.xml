@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-06-04T10:09:40Z</date>
+    <date>2019-06-20T14:21:29Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -198,7 +198,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},state].str(&quot;online&quot;)}=0</expression>
+                            <expression>{Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},state].str(&quot;online&quot;)}=0 and {Template Top-IX Raid:topix.disks.discovery[{#DISKNAME},state].str(&quot;spare&quot;)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>RAID disk {#DISKNAME} not online on {HOST.NAME}</name>
