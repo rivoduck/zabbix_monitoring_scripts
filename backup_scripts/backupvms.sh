@@ -118,7 +118,7 @@ VMUUIDS=''
 VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false power-state=running | grep uuid | cut -d":" -f2| sed 's/^ *//g')
 INIZIOORE=`date +%k:%M`
 INIZIODATA=`date +%d-%m-%Y`
-echo -e "Inizio backup $TIPO macchine di $SERVER alle ore $INIZIOORE del $INIZIODATA \n";
+echo -e "\n\n\n***** $INIZIODATA $INIZIOORE: Inizio backup $TIPO macchine di $SERVER\n";
 echo -e "Inizio backup $TIPO macchine di $SERVER alle ore $INIZIOORE del $INIZIODATA \n" >> $MAIL
 
 if [ -z "${VMUUIDS}" ]
@@ -167,7 +167,6 @@ FINEORE=`date +%k:%M`
 FINEDATA=`date +%d-%m-%Y`
 
 echo " " >> $MAIL
-echo "Fine backup $TIPO macchine di $SERVER alle ore $FINEORE del $FINEDATA";
 echo "Fine backup $TIPO macchine di $SERVER alle ore $FINEORE del $FINEDATA" >> $MAIL
 
 /usr/sbin/ssmtp $destinatari < $MAIL
@@ -188,4 +187,5 @@ then
 	/usr/bin/zabbix_sender -z $TRAP_ZABBIX_HOST -p 10051 -s "$TRAP_HOST" -k $TRAP_KEY -o 1
 fi
 
+echo "***** $FINEDATA $FINEORE: Fine backup $TIPO macchine di $SERVER\n\n";
 
