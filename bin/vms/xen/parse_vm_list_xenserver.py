@@ -194,7 +194,7 @@ if len(sys.argv) > 3:
 
 
 
-exec_command = 'xe vm-list params=uuid,dom-id,name-label,name-description,power-state,memory-static-max,VCPUs-max,networks'
+exec_command = 'xe vm-list is-control-domain=false is-a-snapshot=false params=uuid,dom-id,name-label,name-description,power-state,memory-static-max,VCPUs-max,networks'
 if vm_name and vm_name != "":
     exec_command = '%s name-label="%s"' % (exec_command, vm_name)
     detailed_view=True
