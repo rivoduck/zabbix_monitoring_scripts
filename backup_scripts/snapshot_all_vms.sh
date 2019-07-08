@@ -7,7 +7,10 @@ VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false | grep uuid | c
 for VMUUID in $VMUUIDS
 
 	do
-	    	VMNAME=`xe vm-list uuid=$VMUUID | grep name-label | cut -d":" -f2 | sed 's/^ *//g'`
+	    VMNAME=`xe vm-list uuid=$VMUUID | grep name-label | cut -d":" -f2 | sed 's/^ *//g'`
+        echo
+        echo "Inizio snapshot ${VMNAME} (${VMUUID})"
+		
 		xe vm-snapshot uuid=$VMUUID new-name-label="SNAPSHOT-$VMNAME-$DATE"
 
 		count=0
