@@ -178,7 +178,7 @@ umount $local_mountpoint
 
 if [ ! -z $TRAP_ZABBIX_HOST ] && [ ! -z $TRAP_HOST ]
 then
-	TRAP_KEY='trapmonthly'
+	TRAP_KEY='trapmontly'
 	if [ $TIPO == "settimanale" ]
 	then
 		TRAP_KEY='trapweekly'
