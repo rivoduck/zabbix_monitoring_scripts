@@ -178,13 +178,18 @@ umount $local_mountpoint
 
 if [ ! -z $TRAP_ZABBIX_HOST ] && [ ! -z $TRAP_HOST ]
 then
-	TRAP_KEY='trapmontly'
+	# TRAP_KEY='trapmontly'
 	if [ $TIPO == "settimanale" ]
 	then
-		TRAP_KEY='trapweekly'
+		# manda trap settimanale
+		# TRAP_KEY='trapweekly'
+		/usr/bin/zabbix_sender -z $TRAP_ZABBIX_HOST -p 10051 -s "$TRAP_HOST" -k trapweekly -o 1
+	else
+		# manda trap mensile e settimanale
+		/usr/bin/zabbix_sender -z $TRAP_ZABBIX_HOST -p 10051 -s "$TRAP_HOST" -k trapmontly -o 1
+		/usr/bin/zabbix_sender -z $TRAP_ZABBIX_HOST -p 10051 -s "$TRAP_HOST" -k trapweekly -o 1
 	fi
-	echo $TRAP_KEY
-	/usr/bin/zabbix_sender -z $TRAP_ZABBIX_HOST -p 10051 -s "$TRAP_HOST" -k $TRAP_KEY -o 1
+	# /usr/bin/zabbix_sender -z $TRAP_ZABBIX_HOST -p 10051 -s "$TRAP_HOST" -k $TRAP_KEY -o 1
 fi
 
 echo "***** $FINEDATA $FINEORE: Fine backup $TIPO macchine di $SERVER\n\n";
