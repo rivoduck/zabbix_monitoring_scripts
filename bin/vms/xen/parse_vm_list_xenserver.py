@@ -126,9 +126,12 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                             }
                             # check if VIF is already in the list with IPs
                             for port in ports:
-                                if port['name'] == vif_entry['name']:
-                                    vif_entry['ips']=port['ips']
-                                    break
+                                try:
+                                    if port['name'] == vif_entry['name']:
+                                        vif_entry['ips']=port['ips']
+                                        break
+                                except:
+                                    pass
                             port_list.append(vif_entry)
                         # acquire vif UUID
                         vif_uuid = getValue(line)
@@ -156,9 +159,12 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
                 }
                 # check if VIF is already in the list with IPs
                 for port in ports:
-                    if port['name'] == vif_entry['name']:
-                        vif_entry['ips']=port['ips']
-                        break
+                    try:
+                        if port['name'] == vif_entry['name']:
+                            vif_entry['ips']=port['ips']
+                            break
+                    except:
+                        pass
                 port_list.append(vif_entry)
                 
                 
@@ -303,7 +309,10 @@ if detailed_view:
 
 
     if command == 'state':
-        reply=vm['power-state']
+        try:
+            reply=vm['power-state']
+        except:
+            reply="na"
     else:
         reply=json.dumps(vm)
 
@@ -311,10 +320,13 @@ else:
     # generate discovery list of VMs (only name and uuid)
     data=[]
     for vm in vms:
-        data.append({
-            '{#VMNAME}': vm['name-label'],
-            '{#VMUUID}': vm['uuid']
-        })
+        try:
+            data.append({
+                '{#VMNAME}': vm['name-label'],
+                '{#VMUUID}': vm['uuid']
+            })
+        except:
+            pass
     reply=json.dumps({'data': data})
 
 
