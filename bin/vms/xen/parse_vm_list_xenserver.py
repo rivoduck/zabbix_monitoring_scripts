@@ -312,7 +312,7 @@ if detailed_view:
         try:
             reply=vm['power-state']
         except:
-            reply="na"
+            reply="deleted"
     else:
         reply=json.dumps(vm)
 
