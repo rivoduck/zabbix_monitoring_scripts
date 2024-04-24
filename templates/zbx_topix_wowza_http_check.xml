@@ -1,0 +1,27 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 135b0238322b47a989ebaf9f90bde9de
+      name: 'Top-IX templates'
+  templates:
+    - uuid: 190e26e75a3b44d48da520daf5a00367
+      template: 'Template wowza HTTP check 8086'
+      name: 'Template wowza HTTP check 8086'
+      description: 'Fallita GET su hostname:8086, controllare wowza engine'
+      groups:
+        - name: 'Top-IX templates'
+      httptests:
+        - uuid: 9fc43bd925e944f0832e82207225fa68
+          name: 'check http 8086'
+          steps:
+            - name: 'check http 8086'
+              url: 'http://{HOST.CONN}:8086'
+              status_codes: '200'
+          tags:
+            - tag: Application
+              value: 'check http 8086'
+  triggers:
+    - uuid: 37d3f31445c84552b97676193ad20b1c
+      expression: 'last(/Template wowza HTTP check 8086/web.test.fail[check http 8086])<>0'
+      name: 'HTTP port 8086 fail'
+      priority: HIGH

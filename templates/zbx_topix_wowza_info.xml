@@ -1,0 +1,56 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: b52994d67a5c4707b28f97fb7c627fc8
+      template: 'Template Wowza Info'
+      name: 'Template Wowza Info'
+      groups:
+        - name: Templates
+      items:
+        - uuid: a6ec905d87ba4cdfab92292a27e2dda0
+          name: 'Wowza Global Streams'
+          type: EXTERNAL
+          key: 'getWowzaInfo.py["-u","{$WOWUSER}","-p","{$WOWPASS}","-h","{HOST.CONN}","-P","8086","-a","appnum"]'
+          delay: 30s
+          status: DISABLED
+          units: lives
+          description: |
+            Define macros:
+            
+            {$WOWUSER}
+            {$WOWPASS}
+            
+            for authentication.
+          request_method: POST
+          tags:
+            - tag: Application
+              value: 'Wowza Info'
+        - uuid: bc841571d488458a97934593b93c434b
+          name: 'Wowza Global Connections'
+          type: EXTERNAL
+          key: 'getWowzaInfo.py["-u","{$WOWUSER}","-p","{$WOWPASS}","-h","{HOST.CONN}","-P","8086","-a","conn"]'
+          delay: 30s
+          units: users
+          description: |
+            Define macros:
+            
+            {$WOWUSER}
+            {$WOWPASS}
+            
+            for authentication.
+          request_method: POST
+          tags:
+            - tag: Application
+              value: 'Wowza Info'
+          triggers:
+            - uuid: 14ad2b57f6224bccaac73b199fb3e533
+              expression: 'last(/Template Wowza Info/getWowzaInfo.py["-u","{$WOWUSER}","-p","{$WOWPASS}","-h","{HOST.CONN}","-P","8086","-a","conn"])>500'
+              name: 'Superate 500 connessioni'
+              priority: AVERAGE
+            - uuid: efc6b3c90b5241f98913862aa600946c
+              expression: 'last(/Template Wowza Info/getWowzaInfo.py["-u","{$WOWUSER}","-p","{$WOWPASS}","-h","{HOST.CONN}","-P","8086","-a","conn"])>1000'
+              name: 'Superate 1000 connessioni'
+              priority: HIGH
