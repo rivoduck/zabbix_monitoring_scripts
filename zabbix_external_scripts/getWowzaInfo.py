@@ -4,7 +4,7 @@
 # -a appnum - Global application(streaming) num
 
 #import urllib2, base64, sys, getopt
-import urllib, base64, sys, getopt
+import urllib.request, base64, sys, getopt
 import xml.etree.ElementTree as ET
 
 # Default values
@@ -42,36 +42,32 @@ def main (username,password,host,port,getInfo):
     if (len(argv) < 1):
         Usage()   
     
-        try :
-            opts, args = getopt.getopt(argv, "u:p:h:P:a:")
+    try :
+        opts, args = getopt.getopt(argv, "u:p:h:P:a:")
 
-            # Assign parameters as variables
-            for opt, arg in opts :
-                if opt == "-u" :
-                    username = arg
-                if opt == "-p" :
-                    password = arg
-                if opt == "-h" :
-                    host = arg
-                if opt == "-P" :
-                    port = arg
-                if opt == "-a" :
-                    getInfo = arg
-        except :
+        # Assign parameters as variables
+        for opt, arg in opts :
+            if opt == "-u" :
+                username = arg
+            if opt == "-p" :
+                password = arg
+            if opt == "-h" :
+                host = arg
+            if opt == "-P" :
+                port = arg
+            if opt == "-a" :
+                getInfo = arg
+    except :
             Usage()
 
 
     url="http://" + host + ":" + port + "/connectioncounts/"
-    #authhandler = urllib2.HTTPDigestAuthHandler()
-    #authhandler.add_password(realm, url, username, password)
-    #opener = urllib2.build_opener(authhandler)
-    #urllib2.install_opener(opener)
-    #page_content = urllib2.urlopen(url)
 
-    request = urllib.request(url)
-    base64string = base64.b64encode('%s:%s' % (username, password))
-    request.add_header("Authorization", "Basic %s" % base64string)
-    page_content = urllib.urlopen(request)
+    request = urllib.request.Request(url)
+    authinfo = '%s:%s' % (username, password)
+    base64string = base64.b64encode(authinfo.encode("utf-8"))
+    request.add_header("Authorization", "Basic %s" % str(base64string, "utf-8"))
+    page_content = urllib.request.urlopen(request)
 
     xmlroot = ET.fromstring(page_content.read())	
 
