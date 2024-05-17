@@ -5,6 +5,11 @@ Script for monitoring Xen/XenServer Dom0 and more
 ## Prerequisites
 ### Installing git
 
+#### XCP 8
+~~~~
+yum install git
+~~~~
+
 #### XenServer 7.2
 ~~~~
 yum --enablerepo base install git
@@ -19,6 +24,16 @@ rpm -ev epel-release
 ~~~~
 
 ### Installing Zabbix agent
+#### XCP 8
+~~~~
+rpm -Uvh https://repo.zabbix.com/zabbix/6.4/rhel/7/x86_64/zabbix-release-6.4-1.el7.noarch.rpm
+rpm -Uvh http://mirror.centos.org/centos/7/os/x86_64/Packages/pcre2-10.23-2.el7.x86_64.rpm
+yum clean all
+yum install zabbix-agent
+~~~~
+
+
+#### XenServer
 ~~~~
 rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.9-1.el7.x86_64.rpm
 ~~~~
