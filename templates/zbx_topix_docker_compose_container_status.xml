@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+  <version>7.0</version>
+  <templates>
+    <template>
+      <uuid>dcda839524664223a93f8cd6fad99fff</uuid>
+      <template>Template Docker Compose Discovery</template>
+      <name>Template Docker Compose Discovery</name>
+      <description>Discovery of docker containers and compose projects.</description>
+      <groups>
+        <group>
+          <name>Templates</name>
+        </group>
+      </groups>
+      <discovery_rules>
+        <discovery_rule>
+          <uuid>f7d17e65a61947d8b84690ff900e0844</uuid>
+          <name>Docker Compose Discovery</name>
+          <type>ZABBIX_PASSIVE</type>
+          <key>docker.compose.container.discovery</key>
+          <delay>1m</delay>
+          <lifetime>31d</lifetime>
+          <item_prototypes>
+            <item_prototype>
+              <uuid>0bcba75ba19d478ea033ff850e4848d6</uuid>
+              <name>State of container {#CONTAINER} in project {#PROJECT}</name>
+              <type>ZABBIX_PASSIVE</type>
+              <key>docker.container.status[{#CONTAINER}]</key>
+              <delay>1m</delay>
+              <value_type>TEXT</value_type>
+              <tags>
+                <tag>
+                  <tag>project compose</tag>
+                  <value>{#PROJECT}</value>
+                </tag>
+              </tags>
+            </item_prototype>
+          </item_prototypes>
+        </discovery_rule>
+      </discovery_rules>
+    </template>
+  </templates>
+</zabbix_export>

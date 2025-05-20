@@ -103,3 +103,25 @@ for intel RAID controllers
 ~~~~
 https://downloadcenter.intel.com/download/27654/StorCLI-Standalone-Utility
 ~~~~
+
+
+# Docker compose monitoring scripts
+Script for monitoring docker compose project
+
+- **docker_compose_container_discovery.sh**: Monitor the state of containers by grouping them based on the Compose project
+- **docker_project_discovery.sh**: Performs discovery of Compose projects
+- **compose_status.sh**: Creates items with the status of Compose projects.
+
+# Template files
+
+The template directory contains the templates related to the scripts to be added to Zabbix:
+- **zbx_topix_docker_compose_container_status.xml**: Discovery of Docker containers and Compose projects.
+- **zbx_topix_docker_compose_status.xml**: Compose Project Status Monitoring.
+
+# Configuration to be added to zabbix_agent2.conf
+File **zabbix_agent.conf.d/topix_docker_compose.conf"**
+
+UserParameter=docker.compose.container.discovery,/opt/zabbix/docker_compose_container_discovery.sh
+UserParameter=docker.container.status[*],docker inspect --format '{{.State.Status}}' "$1"
+UserParameter=docker.discovery.projects,/opt/zabbix/docker_project_discovery.sh
+UserParameter=docker.project.status[*],/opt/zabbix/compose_status.sh "$1"

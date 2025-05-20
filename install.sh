@@ -8,6 +8,10 @@ ZABBIX_AGENT_CONF_D_2="zabbix_agentd.d/"
 BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 LOCAL_ZABBIX_AGENT_CONF_D="zabbix_agentd.conf.d/"
 
+ZABBIX_AGENT2_CONF_PATH="/usr/local/etc/zabbix_agent2.conf"
+ZABBIX_AGENT2_CONF_PLUGIN_D="zabbix_agent2.d/plugins.d"
+SOURCE_PLUGIN_FILE="zabbix_agent2.d/plugins.d/topix_docker_compose.conf"
+
 NEWLINE=$'\n'
 
 # import functions
@@ -108,5 +112,50 @@ else
     # errors occourred
     error_exit "${errors}"
 fi
+echo
+
+errors=""
+
+# Check Docker
+if command -v docker &> /dev/null; then
+    echo "Docker installed."
+else
+        errors="${errors}Docker is not installed"
+        echo "[fail]"
+fi
+
+# Check Docker Compose
+if command -v docker-compose &> /dev/null; then
+    echo "Docker Compose standalone installed."
+elif docker compose version &> /dev/null; then
+    echo "Docker Compose (plugin) installed."
+else
+        errors="${errors}Docker is not installed"
+        echo "[fail]"
+fi
+
+# Check zabbix_agent2.conf
+if [ -f "$ZABBIX_AGENT2_CONF_PATH" ]; then
+    echo "File $ZABBIX_AGENT2_CONF_PATH exists."
+else
+    errors="${errors}File $ZABBIX_AGENT2_CONF_PATH doesn't exist."
+fi
+
+# Check directory plugin
+if [ -d "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}" ]; then
+    echo "Directory exists: $ZABBIX_AGENT2_CONF_PLUGIN_D"
+else
+    errors="${errors}Directory $ZABBIX_AGENT2_CONF_PLUGIN_D doesn't exits."
+fi
+
+if [ "X${errors}" == "X" ]
+then
+  install_file $SOURCE_PLUGIN_FILE ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D} ${BUILD_BASE}${ZABBIX_AGENT2_CONF_PLUGIN_D}
+else
+  error_exit "${errors}"
+fi
+
+
+
 echo
 
