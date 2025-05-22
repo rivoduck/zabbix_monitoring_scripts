@@ -129,3 +129,46 @@ function disk_detect() {
     fi
     return 0
 }
+
+
+
+
+# detect docker and docker compose
+# return values:
+#    0 no docker found
+#    1 docker found, no docker compose found
+#    2 docker compose found
+function docker_detect() {
+    if [ "X$1" == "X-v" ]
+    then
+        printf "%-80s" "checking Docker compose"
+    fi
+    # Check Docker
+    if command -v docker &> /dev/null; then
+        # Check Docker Compose
+        if command -v docker-compose &> /dev/null; then
+            if [ "X$1" == "X-v" ]
+            then
+                echo "[Docker Compose standalone]"
+            fi
+            return 2
+        elif docker compose version &> /dev/null; then
+            if [ "X$1" == "X-v" ]
+            then
+                echo "[Docker Compose plugin]"
+            fi
+            return 2
+        fi
+    else
+        if [ "X$1" == "X-v" ]
+        then
+            echo "[Docker]"
+        fi
+        return 1
+    fi
+    if [ "X$1" == "X-v" ]
+    then
+        echo "[no Docker]"
+    fi
+    return 0
+}

@@ -5,12 +5,13 @@
 ZABBIX_BASE_CONFDIR="/etc/zabbix/"
 ZABBIX_AGENT_CONF_D_1="zabbix_agentd.conf.d/"
 ZABBIX_AGENT_CONF_D_2="zabbix_agentd.d/"
+ZABBIX_AGENT_CONF_D_3="zabbix_agent2.d/"
 BUILD_BASE="/opt/zabbix_monitoring_scripts/"
+
+# path of conf files inside the "built" distribution
 LOCAL_ZABBIX_AGENT_CONF_D="zabbix_agentd.conf.d/"
 
-ZABBIX_AGENT2_CONF_PATH="/usr/local/etc/zabbix_agent2.conf"
-ZABBIX_AGENT2_CONF_PLUGIN_D="zabbix_agent2.d/plugins.d"
-SOURCE_PLUGIN_FILE="zabbix_agent2.d/plugins.d/topix_docker_compose.conf"
+ZABBIX_AGENT2_CONF_PLUGIN_D="${ZABBIX_AGENT_CONF_D_3}zabbix_agent2.d/plugins.d/"
 
 NEWLINE=$'\n'
 
@@ -24,21 +25,40 @@ disk_found=0
 
 echo
 
-# check directories and files 
+zabbix_agent_version=1
+# check directories and files
+# imposta la variabile ZABBIX_AGENT_CONF_D alla cartella effettivamente trovata
 printf "%-80s" "checking zabbix conf dir"
-if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1} ]
+if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_3} ]
 then
 	if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2} ]
 	then
-	    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1}] or [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2}]${NEWLINE}"
-	    echo "[fail]"
+        if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1} ]
+        then
+    	    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1}] or ${NEWLINE} [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2}] or ${NEWLINE}
+[${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_3}]${NEWLINE}"
+
+    	    echo "[fail]"
+        else
+            ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_1}
+            echo "[OK]"
+        fi
 	else
 		ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_2}
 		echo "[OK]"
 	fi
 else
-	ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_1}
-    echo "[OK]"
+	ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_3}
+    echo "[OK (agent2)]"
+    zabbix_agent_version=2
+    
+    # Check directory plugin
+    if [ -d "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}" ]; then
+        echo "Directory exists: $ZABBIX_AGENT2_CONF_PLUGIN_D"
+    else
+        echo "Creating dir ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}"
+        mkdir "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}"
+    fi
 fi
 
 printf "%-80s" "checking distribution dir"
@@ -57,6 +77,8 @@ vm_found=$?
 disk_detect -v
 disk_found=$?
 
+docker_detect -v
+docker_found=$?
 
 echo 
 if [ "${vm_found:-0}" -eq 2 ]
@@ -73,7 +95,7 @@ then
     fi
 fi
 
-if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 || "${disk_found:-0}" -eq 2 ]]
+if [[ "${vm_found:-0}" -eq 1 || "${disk_found:-0}" -eq 1 || "${disk_found:-0}" -eq 2 || "${docker_found:-0}" -eq 1 || "${docker_found:-0}" -eq 2 ]]
 then
     # XenServer or Mega Raid checks
     printf "%-80s" "checking Python"
@@ -100,62 +122,28 @@ if [ "X${errors}" == "X" ]
 then
     # install files
     install_file topix_general.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
-	if [ "${vm_found:-0}" -ne 0 ]
+	
+    if [ "${vm_found:-0}" -ne 0 ]
 	then
         install_file topix_vms.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
 	fi
-	if [ "${disk_found:-0}" -ne 0 ]
+	
+    if [ "${disk_found:-0}" -ne 0 ]
 	then
         install_file topix_disks.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D} ${BUILD_BASE}${LOCAL_ZABBIX_AGENT_CONF_D}
 	fi
+	
+    if [ "${docker_found:-0}" -ne 0 ]
+	then
+        if [ $zabbix_agent_version -eq 2 ]
+        then
+            install_file topix_docker_compose.conf ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D} ${BUILD_BASE}${ZABBIX_AGENT2_CONF_PLUGIN_D}
+        fi
+    fi
 else
     # errors occourred
     error_exit "${errors}"
 fi
 echo
 
-errors=""
-
-# Check Docker
-if command -v docker &> /dev/null; then
-    echo "Docker installed."
-else
-        errors="${errors}Docker is not installed"
-        echo "[fail]"
-fi
-
-# Check Docker Compose
-if command -v docker-compose &> /dev/null; then
-    echo "Docker Compose standalone installed."
-elif docker compose version &> /dev/null; then
-    echo "Docker Compose (plugin) installed."
-else
-        errors="${errors}Docker is not installed"
-        echo "[fail]"
-fi
-
-# Check zabbix_agent2.conf
-if [ -f "$ZABBIX_AGENT2_CONF_PATH" ]; then
-    echo "File $ZABBIX_AGENT2_CONF_PATH exists."
-else
-    errors="${errors}File $ZABBIX_AGENT2_CONF_PATH doesn't exist."
-fi
-
-# Check directory plugin
-if [ -d "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}" ]; then
-    echo "Directory exists: $ZABBIX_AGENT2_CONF_PLUGIN_D"
-else
-    errors="${errors}Directory $ZABBIX_AGENT2_CONF_PLUGIN_D doesn't exits."
-fi
-
-if [ "X${errors}" == "X" ]
-then
-  install_file $SOURCE_PLUGIN_FILE ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D} ${BUILD_BASE}${ZABBIX_AGENT2_CONF_PLUGIN_D}
-else
-  error_exit "${errors}"
-fi
-
-
-
-echo
 
