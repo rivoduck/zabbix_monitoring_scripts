@@ -11,7 +11,7 @@ BUILD_BASE="/opt/zabbix_monitoring_scripts/"
 # path of conf files inside the "built" distribution
 LOCAL_ZABBIX_AGENT_CONF_D="zabbix_agentd.conf.d/"
 
-ZABBIX_AGENT2_CONF_PLUGIN_D="${ZABBIX_AGENT_CONF_D_3}zabbix_agent2.d/plugins.d/"
+ZABBIX_AGENT2_CONF_PLUGIN_D="${ZABBIX_AGENT_CONF_D_3}plugins.d/"
 
 NEWLINE=$'\n'
 
