@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-  <version>7.0</version>
+  <version>6.4</version>
   <templates>
     <template>
       <uuid>2e129380b0454cd2b59bf8b428f48d95</uuid>
@@ -18,14 +18,14 @@
           <name>Compose Project Discovery</name>
           <type>ZABBIX_PASSIVE</type>
           <key>docker.discovery.projects</key>
-          <delay>1m</delay>
+          <delay>5m</delay>
           <item_prototypes>
             <item_prototype>
               <uuid>476f9f7152054cceab1d095a5c0d9876</uuid>
               <name>Compose Project {#PROJECT} Status</name>
               <type>ZABBIX_PASSIVE</type>
               <key>docker.project.status[{#PROJECT}]</key>
-              <delay>60s</delay>
+              <delay>5m</delay>
               <value_type>TEXT</value_type> <!-- Numeric (unsigned) -->
               <history>7d</history>
               <trends>30d</trends>
