@@ -116,6 +116,18 @@ then
     fi
 fi
 
+if [[ "${docker_found:-0}" -eq 1 || "${docker_found:-0}" -eq 2 ]]
+then
+    # check jq needed by docker scripts
+    which jq > /dev/null 2>&1
+    if [ $? -ne 0 ]
+    then
+        errors="${errors}jq command not available"
+        echo "[fail]"
+    else
+        echo "[OK]"
+    fi
+fi
 
 
 if [ "X${errors}" == "X" ]
