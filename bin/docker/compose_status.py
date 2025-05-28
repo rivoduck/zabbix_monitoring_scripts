@@ -19,7 +19,7 @@ def main(project):
     for container_id in get_containers():
         container = inspect_container(container_id)
         labels = container.get('Config', {}).get('Labels', {})
-        proj = labels.get('com.docker.compose.project', 'No project')
+        proj = labels.get('com.docker.compose.project', 'no-docker-compose-project')
         state = container.get('State', {}).get('Status', 'unknown')
 
         if proj == project:

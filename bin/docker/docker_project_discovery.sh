@@ -6,7 +6,7 @@ declare -A project_states
 while read -r id; do
   inspect=$(docker inspect "$id")
   name=$(echo "$inspect" | jq -r '.[0].Name' | sed 's/^\/\(.*\)/\1/')
-  project=$(echo "$inspect" | jq -r '.[0].Config.Labels["com.docker.compose.project"] // "No project"')
+  project=$(echo "$inspect" | jq -r '.[0].Config.Labels["com.docker.compose.project"] // "no-docker-compose-project"')
   state=$(echo "$inspect" | jq -r '.[0].State.Status')
 
   project_containers["$project"]+="{\"container\":\"$name\",\"state\":\"$state\"},"

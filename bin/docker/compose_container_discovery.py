@@ -14,7 +14,7 @@ def inspect_container(container_id):
 def extract_info(container_data):
     name = container_data['Name'].lstrip('/')
     labels = container_data['Config'].get('Labels', {})
-    project = labels.get('com.docker.compose.project', 'No project')
+    project = labels.get('com.docker.compose.project', 'no-docker-compose-project')
 
     state = container_data['State']['Status']
     health_info = container_data['State'].get('Health', {})

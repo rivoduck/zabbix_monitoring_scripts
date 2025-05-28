@@ -19,7 +19,7 @@ def main():
         container_data = inspect_container(container_id)
         name = container_data['Name'].lstrip('/')
         labels = container_data['Config'].get('Labels', {})
-        project = labels.get('com.docker.compose.project', 'No project')
+        project = labels.get('com.docker.compose.project', 'no-docker-compose-project')
         state = container_data['State']['Status']
         project_states[project].append(state)
 
