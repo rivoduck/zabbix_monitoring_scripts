@@ -35,6 +35,20 @@
                 </tag>
               </tags>
             </item_prototype>
+            <item_prototype>
+              <uuid>44edfc94a0254bebb4f823be86f397f8</uuid>
+              <name>Exit code container {#CONTAINER} in project {#PROJECT}</name>
+              <type>ZABBIX_PASSIVE</type>
+              <key>docker.container.exit_code[{#CONTAINER}]</key>
+              <delay>1m</delay>
+              <value_type>TEXT</value_type>
+              <tags>
+                <tag>
+                  <tag>project compose</tag>
+                  <value>{#PROJECT}</value>
+                </tag>
+              </tags>
+            </item_prototype>
           </item_prototypes>
         </discovery_rule>
       </discovery_rules>
