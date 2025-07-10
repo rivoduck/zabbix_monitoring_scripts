@@ -15,7 +15,7 @@ zabbix_export:
           name: 'check http 8086'
           steps:
             - name: 'check http 8086'
-              url: 'http://{HOST.CONN}:8086'
+              url: 'http://{HOST.CONN}:8086/ServerVersion'
               status_codes: '200'
           tags:
             - tag: Application
