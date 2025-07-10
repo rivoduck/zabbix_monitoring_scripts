@@ -88,9 +88,12 @@ cd /opt/zabbix_monitoring_scripts
 ~~~~
 
 nel file /etc/sudoers
-commentare la linea
+commentare le linee (quelle presenti)
 ~~~~
 Defaults    requiretty
+~~~~
+~~~~
+Defaults    use_pty
 ~~~~
 aggiungere la linea in fondo
 ~~~~
