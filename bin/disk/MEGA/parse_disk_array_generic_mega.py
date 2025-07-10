@@ -128,4 +128,4 @@ if len(sys.argv) > 2:
 if len(sys.argv) > 3:
     command = sys.argv[3]
 
-print disk_analysis(executable_name, disk_name, command)
+print (disk_analysis(executable_name, disk_name, command))

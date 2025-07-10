@@ -158,13 +158,13 @@ function docker_detect() {
                 echo "[Docker Compose plugin]"
             fi
             return 2
+        else
+            if [ "X$1" == "X-v" ]
+            then
+                echo "[Docker]"
+            fi
+            return 1
         fi
-    else
-        if [ "X$1" == "X-v" ]
-        then
-            echo "[Docker]"
-        fi
-        return 1
     fi
     if [ "X$1" == "X-v" ]
     then
