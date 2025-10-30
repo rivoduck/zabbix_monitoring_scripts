@@ -137,7 +137,10 @@ do
     xe template-param-set is-a-template=false ha-always-run=false uuid=$SNAPUUID
     echo "$?"
 	# lancia l'export dello snapshot usando nice e ionice per dare bassa priorita' al processo sia per la CPU che per l'IO
-    nice -n 19 ionice -c2 -n7 -t xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$DATA.xva"
+    #nice -n 19 ionice -c2 -n7 -t xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$DATA.xva"
+    nice -n 19 ionice -c2 -n7 -t xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$SERVER-$DATA.xva"
+    chmod 644 "$BACKUPPATH/$VMNAME-$TIPO-$SERVER-$DATA.xva"
+    
     echo "$?"
     xe vm-uninstall uuid=$SNAPUUID force=true
     echo "$?"	
@@ -149,7 +152,10 @@ do
 	${logDebug} "OK. Backup della VM $VMNAME effettuato correttamente"
 	echo -e "OK. Backup di $VMNAME" >> $MAIL
     fi
-    VMORDERS=`ls -t $BACKUPPATH/$VMNAME-$TIPO*`
+
+    # VMORDERS=`ls -t $BACKUPPATH/$VMNAME-$TIPO*`  ERRORE se il nome della VM contiene spazi. Racchiudere tra apici
+    VMORDERS=`ls -t $BACKUPPATH/"$VMNAME"-$TIPO*`
+
     contatore=1
     for VMORDER in ${VMORDERS}
     do 
