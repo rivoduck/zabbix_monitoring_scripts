@@ -45,7 +45,7 @@ else
 	then
 		numerobackup=$numerobackup_settimanale
 	else
-	    echo "oggi non e' giorno di backup (vedi ${CONFIG})"
+	    echo "[$(date +"%a %Y-%m-%d %H:%M:%S")] oggi non e' giorno di backup (vedi ${CONFIG})"
 	    echo "usare $0 settimanale o $0 mensile per forzare il backup adesso"
 		exit 0
 	fi
@@ -75,19 +75,19 @@ logDebug="logger -t ${loggerTag} -s -p ${loggerFacility}.debug"
 
 # verifica che la cartella dello storage sia montata, scrivibile e abbia lo spazio sufficiente per i backup
 
-folderumount=$(mount|grep $local_mountpoint)
+foldermounttype=$(stat -f -L -c %T $local_mountpoint)
 
-if [ "$folderumount" == "" ]
+if [[ "$foldermounttype" != "nfs" ]]
 then
-        umount $local_mountpoint
+        #umount $local_mountpoint
         mount -F $SHARE $local_mountpoint -o nfsvers=3 
 fi
   
-folderumount=$(mount|grep $local_mountpoint)
+foldermounttype=$(stat -f -L -c %T $local_mountpoint)
                 
-if [ "$folderumount" == "" ]
+if [[ "$foldermounttype" != "nfs" ]]
 then
-        ${logCritical} "Impossibile montare la cartella per i backup";
+        ${logCritical} "[$(date +"%a %Y-%m-%d %H:%M:%S")] Impossibile montare la cartella per i backup";
 	echo -e "Backup Fallito!\nImpossibile montare la cartella per i backup!" >> $MAIL
 	/usr/sbin/ssmtp $destinatari < $MAIL
         exit 1;
@@ -95,11 +95,11 @@ fi
   
 spaziolibero=$(df -P $local_mountpoint|grep $local_mountpoint| awk '{print $4}')
                         
-test -w $local_mountpoint/fileprovamount-scrittura || { ${logCritical} "Cartella dei backup non montata correttamente"; exit 1; }
+test -w $local_mountpoint/fileprovamount-scrittura || { ${logCritical} "[$(date +"%a %Y-%m-%d %H:%M:%S")] Cartella dei backup non montata correttamente"; exit 1; }
 
 if [  $spaziolibero -lt $spaziominimoStorage ]
 then
-        ${logCritical} "La cartella dei backup non ha spazio sufficiente per effettuare i backup";
+        ${logCritical} "[$(date +"%a %Y-%m-%d %H:%M:%S")] La cartella dei backup non ha spazio sufficiente per effettuare i backup";
         echo -e "Backup Fallito!\nLa cartella dei backup non ha spazio sufficiente per effettuare i backup!" >> $MAIL
         /usr/sbin/ssmtp $destinatari < $MAIL
         exit 1;
@@ -123,7 +123,7 @@ echo -e "Inizio backup $TIPO macchine di $SERVER alle ore $INIZIOORE del $INIZIO
 
 if [ -z "${VMUUIDS}" ]
 then
-${logDebug} "Nessuna VM da salvare"; echo -e "Nessuna VM da salvare" >> $MAIL ; /usr/sbin/ssmtp $destinatari < $MAIL; exit 1;
+${logDebug} "[$(date +"%a %Y-%m-%d %H:%M:%S")] Nessuna VM da salvare"; echo -e "Nessuna VM da salvare" >> $MAIL ; /usr/sbin/ssmtp $destinatari < $MAIL; exit 1;
 fi  
 
 
@@ -146,10 +146,10 @@ do
     echo "$?"	
     if test $? -ne 0
     then
-	${logCritical} "ERRORE nel backup della VM $VMNAME"
+	${logCritical} "[$(date +"%a %Y-%m-%d %H:%M:%S")] ERRORE nel backup della VM $VMNAME"
 	echo -e "ERRORE! Backup di $VMNAME!" >> $MAIL
     else
-	${logDebug} "OK. Backup della VM $VMNAME effettuato correttamente"
+	${logDebug} "[$(date +"%a %Y-%m-%d %H:%M:%S")] OK. Backup della VM $VMNAME effettuato correttamente"
 	echo -e "OK. Backup di $VMNAME" >> $MAIL
     fi
 
@@ -162,7 +162,7 @@ do
 	if [ $contatore -gt $numerobackup ]
 	then
 		rm $VMORDER
-                ${logDebug} "Rimozione vecchio backup $TIPO $VMORDER di $contatore volte prima"  
+                ${logDebug} "[$(date +"%a %Y-%m-%d %H:%M:%S")] Rimozione vecchio backup $TIPO $VMORDER di $contatore volte prima"  
 	fi
 	contatore=$((contatore+1))
     done	
@@ -179,7 +179,7 @@ echo "Fine backup $TIPO macchine di $SERVER alle ore $FINEORE del $FINEDATA" >> 
 
 rm /tmp/mail-$DATA.txt
 
-umount $local_mountpoint
+#umount $local_mountpoint
 
 
 if [ ! -z $TRAP_ZABBIX_HOST ] && [ ! -z $TRAP_HOST ]
