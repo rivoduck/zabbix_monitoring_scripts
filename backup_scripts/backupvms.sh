@@ -115,7 +115,8 @@ mkdir -p $BACKUPPATH
 
 VMUUIDS=''
 # Fetching list UUIDs of all VMs running on XenServer
-VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false power-state=running | grep uuid | cut -d":" -f2| sed 's/^ *//g')
+#VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false power-state=running | grep uuid | cut -d":" -f2| sed 's/^ *//g')
+VMUUIDS=$(xe vm-list power-state=running is-a-snapshot=false is-control-domain=false params=uuid,name-label,tags | awk '/^uuid/ {u=$NF} /^[[:space:]]*name-label/ {n=substr($0,index($0,":")+2)} /^[[:space:]]*tags/ {t=tolower($0)} /^$/ {if (u && !seen[u]++ && t !~ /(backup=no|backup=false|backup=disabled)/) print u, n}')
 INIZIOORE=`date +%k:%M`
 INIZIODATA=`date +%d-%m-%Y`
 echo -e "\n\n\n***** $INIZIODATA $INIZIOORE: Inizio backup $TIPO macchine di $SERVER\n";
