@@ -48,39 +48,46 @@ function install_file() {
 
 # detect Xen or XenServer
 # return values:
-#    0 no known virtualizer detected, cannot find xm or xe, error
+#    0 no known virtualizer detected, cannot find xm or xe or pvesh, error
 #    1 XenServer found
 #    2 Xen found
+#    3 Proxmox found
 function vm_detect() {
     if [ "X$1" == "X-v" ]
     then
         printf "%-80s" "checking Virtualizer type"
     fi
-    which xe > /dev/null 2>&1
-    if [ $? -eq 0 ]
-    then
-        if [ "X$1" == "X-v" ]
-        then
+
+    # XenServer
+    if command -v xe >/dev/null 2>&1; then
+        if [ "X$1" == "X-v" ]; then
             echo "[Xen Server]"
         fi
         return 1
-    else
-        which xm > /dev/null 2>&1
-        if [ $? -eq 0 ]
-        then
-            if [ "X$1" == "X-v" ]
-            then
-                echo "[Xen]"
-            fi
-            return 2
-        else
-            if [ "X$1" == "X-v" ]
-            then
-                echo "[cannot find]"
-            fi
-            return 0
-        fi
     fi
+
+    # Xen classic
+    if command -v xm >/dev/null 2>&1; then
+        if [ "X$1" == "X-v" ]; then
+            echo "[Xen]"
+        fi
+        return 2
+    fi
+
+    # Proxmox
+    if command -v pvesh >/dev/null 2>&1; then
+        if [ "X$1" == "X-v" ]; then
+            echo "[Proxmox]"
+        fi
+        return 3
+    fi
+
+    # Unknown
+    if [ "X$1" == "X-v" ]; then
+        echo "[cannot find]"
+    fi
+    return 0
+
 }
 
 
