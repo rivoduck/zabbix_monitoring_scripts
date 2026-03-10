@@ -23,6 +23,12 @@ yum install git
 rpm -ev epel-release
 ~~~~
 
+#### Proxmox
+~~~~
+apt install git
+~~~~
+
+
 ### Installing Zabbix agent
 #### XCP 8
 ~~~~

@@ -19,8 +19,12 @@ else
     then
         # XenServer
         python ${current_dir}/xen/parse_vm_list_xenserver.py "$vm_name" $command "$uuid"
-    else
+    elif [ $res -eq 2 ]
+    then
         # Xen
         php ${current_dir}/xen/parse_vm_list_xen.php "$vm_name" $command "$uuid"
+    else
+       # Proxmox
+       python3 ${current_dir}/proxmox/parse_vm_list_proxmox.py "$vm_name" $command "$uuid"
     fi
 fi
