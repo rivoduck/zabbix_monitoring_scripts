@@ -116,7 +116,9 @@ mkdir -p $BACKUPPATH
 VMUUIDS=''
 # Fetching list UUIDs of all VMs running on XenServer
 #VMUUIDS=$(xe vm-list is-control-domain=false is-a-snapshot=false power-state=running | grep uuid | cut -d":" -f2| sed 's/^ *//g')
-VMUUIDS=$(xe vm-list power-state=running is-a-snapshot=false is-control-domain=false params=uuid,name-label,tags | awk '/^uuid/ {u=$NF} /^[[:space:]]*name-label/ {n=substr($0,index($0,":")+2)} /^[[:space:]]*tags/ {t=tolower($0)} /^$/ {if (u && !seen[u]++ && t !~ /(backup=no|backup=false|backup=disabled)/) print u, n}')
+VMUUIDS=$(xe vm-list power-state=running is-a-snapshot=false is-control-domain=false params=uuid,tags | awk '/^uuid/ {u=$NF} /^[[:space:]]*tags/ {t=tolower($0)} /^$/ { if (u && !seen[u]++ && t !~ /(backup=no|backup=false|backup=disabled)/) print u }')
+
+
 INIZIOORE=`date +%k:%M`
 INIZIODATA=`date +%d-%m-%Y`
 echo -e "\n\n\n***** $INIZIODATA $INIZIOORE: Inizio backup $TIPO macchine di $SERVER\n";
@@ -130,7 +132,8 @@ fi
 
 for VMUUID in ${VMUUIDS}
 do
-    VMNAME=`xe vm-list uuid=$VMUUID | grep name-label | cut -d":" -f2 | sed 's/^ *//g'`
+    # Recupera il nome della VM (può contenere spazi)
+    VMNAME=$(xe vm-param-get uuid="$VMUUID" param-name=name-label)
 
     ${logDebug} "Inizio backup di $VMNAME"	
     SNAPUUID=`xe vm-snapshot uuid=$VMUUID new-name-label="SNAPSHOT-$VMUUID-$DATE"`
@@ -138,12 +141,11 @@ do
     xe template-param-set is-a-template=false ha-always-run=false uuid=$SNAPUUID
     echo "$?"
 	# lancia l'export dello snapshot usando nice e ionice per dare bassa priorita' al processo sia per la CPU che per l'IO
-    #nice -n 19 ionice -c2 -n7 -t xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$DATA.xva"
     nice -n 19 ionice -c2 -n7 -t xe vm-export vm=$SNAPUUID filename="$BACKUPPATH/$VMNAME-$TIPO-$SERVER-$DATA.xva"
     chmod 644 "$BACKUPPATH/$VMNAME-$TIPO-$SERVER-$DATA.xva"
     
     echo "$?"
-    xe vm-uninstall uuid=$SNAPUUID force=true
+    xe vm-uninstall uuid="$SNAPUUID" force=true
     echo "$?"	
     if test $? -ne 0
     then
@@ -155,14 +157,17 @@ do
     fi
 
     # VMORDERS=`ls -t $BACKUPPATH/$VMNAME-$TIPO*`  ERRORE se il nome della VM contiene spazi. Racchiudere tra apici
-    VMORDERS=`ls -t $BACKUPPATH/"$VMNAME"-$TIPO*`
+
+    # Usa mapfile + array per gestire nomi con spazi in modo sicuro
+    mapfile -t VMORDERS < <(find "$BACKUPPATH" -maxdepth 1 -name "${VMNAME}-${TIPO}*.xva" | sort -r)
 
     contatore=1
-    for VMORDER in ${VMORDERS}
+    for VMORDER in "${VMORDERS[@]}"
     do 
+        echo "VMORDER --> $VMORDER"
 	if [ $contatore -gt $numerobackup ]
 	then
-		rm $VMORDER
+		rm -- "$VMORDER"
                 ${logDebug} "[$(date +"%a %Y-%m-%d %H:%M:%S")] Rimozione vecchio backup $TIPO $VMORDER di $contatore volte prima"  
 	fi
 	contatore=$((contatore+1))
