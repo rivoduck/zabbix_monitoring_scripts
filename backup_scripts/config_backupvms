@@ -14,8 +14,14 @@
 giorno_di_backup='Sun'
 
 spaziominimoStorage="1000000000"
-local_mountpoint="/backup"
-SHARE='192.168.182.9:/vol/topix/backup-cloud'
+# Share NFS
+#local_mountpoint="/backup"
+#SHARE='192.168.182.9:/vol/topix/backup-cloud'
+
+# Share ceph
+local_mountpoint="/backup-ceph"
+SHARE='192.168.182.230:/cloud-backup'
+
 destinatari='cloud-alert@top-ix.org'
 numerobackup_mensile="2"
 numerobackup_settimanale="3"

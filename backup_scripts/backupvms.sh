@@ -80,7 +80,8 @@ foldermounttype=$(stat -f -L -c %T $local_mountpoint)
 if [[ "$foldermounttype" != "nfs" ]]
 then
         #umount $local_mountpoint
-        mount -F $SHARE $local_mountpoint -o nfsvers=3 
+        #mount -F $SHARE $local_mountpoint -o nfsvers=3 
+        mount -F $SHARE $local_mountpoint
 fi
   
 foldermounttype=$(stat -f -L -c %T $local_mountpoint)
