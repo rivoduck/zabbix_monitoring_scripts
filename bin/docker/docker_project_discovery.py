@@ -2,6 +2,9 @@ import subprocess
 import json
 from collections import defaultdict
 
+from project_grouping import resolve_project
+
+
 def get_container_ids():
     result = subprocess.run(['docker', 'ps', '-a', '--format', '{{.ID}}'],
                             capture_output=True, text=True)
@@ -19,7 +22,8 @@ def main():
         container_data = inspect_container(container_id)
         name = container_data['Name'].lstrip('/')
         labels = container_data['Config'].get('Labels', {})
-        project = labels.get('com.docker.compose.project', 'no-docker-compose-project')
+        # Use priority chain: custom label > compose project > fallback bucket.
+        project = resolve_project(labels)
         state = container_data['State']['Status']
         project_states[project].append(state)
 
