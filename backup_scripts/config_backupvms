@@ -23,7 +23,7 @@ local_mountpoint="/backup-ceph"
 SHARE='192.168.182.230:/cloud-backup'
 
 destinatari='cloud-alert@top-ix.org'
-numerobackup_mensile="2"
+numerobackup_mensile="1"
 numerobackup_settimanale="3"
 
 # invia una trap a zabbix usando zabbix_sender dopo che il backup si conclude (nessuna info su successo, commentare per disabilitare)
