@@ -41,3 +41,17 @@ def resolve_project(labels):
         or labels.get('com.docker.stack.namespace')
         or 'no-docker-compose-project'
     )
+
+
+def resolve_runtime(labels):
+    """Detect the container runtime environment.
+
+    Returns 'swarm', 'compose', or 'standalone'.
+    Independent of resolve_project: runtime is about infrastructure,
+    project is about grouping.
+    """
+    if labels.get('com.docker.stack.namespace'):
+        return 'swarm'
+    if labels.get('com.docker.compose.project'):
+        return 'compose'
+    return 'standalone'
