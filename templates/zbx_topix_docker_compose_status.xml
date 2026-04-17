@@ -36,6 +36,10 @@
                   <tag>project status</tag>
                   <value>{#PROJECT}</value>
                 </tag>
+                <tag>
+                  <tag>runtime</tag>
+                  <value>{#RUNTIME}</value>
+                </tag>
               </tags>
             </item_prototype>
           </item_prototypes>
