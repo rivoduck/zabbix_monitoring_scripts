@@ -1,6 +1,9 @@
 import subprocess
 import json
 
+from project_grouping import resolve_project
+
+
 def get_container_ids():
     result = subprocess.run(['docker', 'ps', '-a', '--format', '{{.ID}}'],
                             capture_output=True, text=True)
@@ -14,7 +17,8 @@ def inspect_container(container_id):
 def extract_info(container_data):
     name = container_data['Name'].lstrip('/')
     labels = container_data['Config'].get('Labels', {})
-    project = labels.get('com.docker.compose.project', 'no-docker-compose-project')
+    # Use priority chain: custom label > compose project > swarm namespace > fallback bucket.
+    project = resolve_project(labels)
 
     state = container_data['State']['Status']
     health_info = container_data['State'].get('Health', {})
