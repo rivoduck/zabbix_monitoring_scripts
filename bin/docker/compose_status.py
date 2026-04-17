@@ -2,16 +2,12 @@ import subprocess
 import json
 import sys
 
-from project_grouping import resolve_project
+from project_grouping import resolve_project, inspect_container
 
 
 def get_containers():
     result = subprocess.run(['docker', 'ps', '-a', '-q'], capture_output=True, text=True)
     return result.stdout.strip().splitlines()
-
-def inspect_container(container_id):
-    result = subprocess.run(['docker', 'inspect', container_id], capture_output=True, text=True)
-    return json.loads(result.stdout)[0]
 
 def main(project):
     found = False
@@ -21,6 +17,8 @@ def main(project):
 
     for container_id in get_containers():
         container = inspect_container(container_id)
+        if container is None:
+            continue
         labels = container.get('Config', {}).get('Labels', {})
         # Use priority chain: custom label > compose project > fallback bucket.
         proj = resolve_project(labels)

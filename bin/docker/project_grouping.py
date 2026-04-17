@@ -1,8 +1,21 @@
-"""Shared helper to resolve the project bucket a container belongs to.
+"""Shared helpers for Docker container discovery scripts.
 
-Used by both docker_project_discovery.py and compose_status.py so the
-priority chain is defined in a single place.
+Used by docker_project_discovery.py, compose_status.py and
+compose_container_discovery.py so common logic is defined in a single place.
 """
+
+import subprocess
+import json
+
+
+def inspect_container(container_id):
+    result = subprocess.run(['docker', 'inspect', container_id],
+                            capture_output=True, text=True)
+    # Docker CLI itself can fail to inspect the container.
+    # Prevent crashing in case of empty container data (e.g. a dead container).
+    if result.returncode != 0:
+        return None
+    return json.loads(result.stdout)[0]
 
 
 def resolve_project(labels):
