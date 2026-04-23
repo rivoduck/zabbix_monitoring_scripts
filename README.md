@@ -121,6 +121,37 @@ Script for monitoring docker compose project
 - **docker_project_discovery.sh**: Performs discovery of Compose projects
 - **compose_status.sh**: Creates items with the status of Compose projects.
 
+### Project grouping: Swarm support and custom override
+
+Discovery works out of the box on both Docker Compose and Docker Swarm. On Compose nodes containers are grouped by the standard `com.docker.compose.project` label; on Swarm nodes they are grouped by `com.docker.stack.namespace`, the label that Swarm assigns automatically to every container of a stack. No configuration is required for either case.
+
+In addition, a container can opt into a custom grouping by setting the `zabbix.docker.project` label. When present, this label takes precedence over the auto-detected one. This is useful to split a single project (Compose or Swarm) into multiple logical sub-projects, or to merge containers from different projects into the same bucket by giving them the same value.
+
+Containers that carry none of these labels continue to fall into the `no-docker-compose-project` bucket as before.
+
+Priority order (first non-empty match wins):
+1. `zabbix.docker.project` — opt-in custom label
+2. `com.docker.compose.project` — Docker Compose default
+3. `com.docker.stack.namespace` — Docker Swarm default
+4. `no-docker-compose-project` — fallback bucket (unchanged)
+
+Example — split a compose project into two logical sub-projects:
+
+```yaml
+services:
+  api:
+    labels:
+      zabbix.docker.project: "myapp-backend"
+  db:
+    labels:
+      zabbix.docker.project: "myapp-data"
+  redis:
+    labels:
+      zabbix.docker.project: "myapp-data"
+```
+
+Zabbix will discover two separate projects (`myapp-backend`, `myapp-data`) instead of a single aggregate.
+
 # Template files
 
 The template directory contains the templates related to the scripts to be added to Zabbix:

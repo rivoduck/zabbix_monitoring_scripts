@@ -2,26 +2,28 @@ import subprocess
 import json
 from collections import defaultdict
 
+from project_grouping import resolve_project, resolve_runtime, inspect_container
+
+
 def get_container_ids():
     result = subprocess.run(['docker', 'ps', '-a', '--format', '{{.ID}}'],
                             capture_output=True, text=True)
     return result.stdout.strip().splitlines()
 
-def inspect_container(container_id):
-    result = subprocess.run(['docker', 'inspect', container_id],
-                            capture_output=True, text=True)
-    return json.loads(result.stdout)[0]
-
 def main():
     project_states = defaultdict(list)
+    project_runtime = {}
 
     for container_id in get_container_ids():
         container_data = inspect_container(container_id)
-        name = container_data['Name'].lstrip('/')
+        if container_data is None:
+            continue
         labels = container_data['Config'].get('Labels', {})
-        project = labels.get('com.docker.compose.project', 'no-docker-compose-project')
+        project = resolve_project(labels)
         state = container_data['State']['Status']
         project_states[project].append(state)
+        if project not in project_runtime:
+            project_runtime[project] = resolve_runtime(labels)
 
     summary = []
 
@@ -38,7 +40,8 @@ def main():
 
         summary.append({
             "{#PROJECT}": project,
-            "{#STATUS}": status
+            "{#STATUS}": status,
+            "{#RUNTIME}": project_runtime[project]
         })
 
     print(json.dumps(summary, indent=2))
