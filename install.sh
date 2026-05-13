@@ -25,40 +25,75 @@ disk_found=0
 
 echo
 
+# check which version of zabbix agent is enabled
+systemctl is-enabled zabbix-agent 1>/dev/null 2>&1
+zab_v1_enabled=$?
+systemctl is-enabled zabbix-agent2 1>/dev/null 2>&1
+zab_v2_enabled=$?
+
 zabbix_agent_version=1
+printf "%-80s" "zabbix agent V1"
+if [ $zab_v1_enabled == 0 ]
+then
+	echo "[enabled]"
+	zabbix_agent_version=1
+else
+	echo "[not enabled]"
+fi
+
+printf "%-80s" "zabbix agent V2"
+if [ $zab_v2_enabled == 0 ]
+then
+	echo "[enabled]"
+	zabbix_agent_version=2
+else
+	echo "[not enabled]"
+fi
+
+
 # check directories and files
 # imposta la variabile ZABBIX_AGENT_CONF_D alla cartella effettivamente trovata
 printf "%-80s" "checking zabbix conf dir"
-if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_3} ]
+if [ $zabbix_agent_version == 1 ]
 then
 	if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2} ]
 	then
-        if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1} ]
-        then
-    	    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1}] or ${NEWLINE} [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2}] or ${NEWLINE}
+            if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1} ]
+            then
+    	        errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_1}] or ${NEWLINE} [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_2}] or ${NEWLINE}
 [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_3}]${NEWLINE}"
 
-    	    echo "[fail]"
-        else
-            ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_1}
-            echo "[OK]"
-        fi
+    	        echo "[fail]"
+            else
+                ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_1}
+		echo "[OK (V1)]"
+            fi
 	else
 		ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_2}
-		echo "[OK]"
+		echo "[OK (V1)]"
 	fi
-else
-	ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_3}
-    echo "[OK (agent2)]"
-    zabbix_agent_version=2
+fi
+
+if [ $zabbix_agent_version == 2 ]
+then
+	if [ ! -d ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_3} ]
+	then
+    	    errors="Cannot find Zabbix conf dir [${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT_CONF_D_3}]"
+	    
+	    echo "[fail]"
+	else
+	    ZABBIX_AGENT_CONF_D=${ZABBIX_AGENT_CONF_D_3}
+            echo "[OK (V2)]"
+	fi
     
-    # Check directory plugin
-    if [ -d "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}" ]; then
-        echo "Directory exists: $ZABBIX_AGENT2_CONF_PLUGIN_D"
-    else
-        echo "Creating dir ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}"
-        mkdir "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}"
-    fi
+	# Check directory plugin
+	if [ -d "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}" ];
+	then
+    	    echo "Directory exists: $ZABBIX_AGENT2_CONF_PLUGIN_D"
+	else
+	    echo "Creating dir ${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}"
+	    mkdir "${ZABBIX_BASE_CONFDIR}${ZABBIX_AGENT2_CONF_PLUGIN_D}"
+	fi
 fi
 
 printf "%-80s" "checking distribution dir"
