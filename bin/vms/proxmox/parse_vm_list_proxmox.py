@@ -285,6 +285,7 @@ def createVmEntry(detailed=False, node="", vmid="", name="", status="", memory="
     
     if vmid and vmid != "":
         vmEntry = {
+            "cluster-type": "proxmox",
             "power-state": "running" if status == "running" else "halted",
             "name-description": description,
             "name-label": name,

@@ -1,6 +1,7 @@
 <?php
 // this script creates an array of VMs with the format:
 //   {  
+//      "cluster-type":"xen",
 //      "VCPUs-number":"1",
 //      "uuid":"3848cce7-ad9c-4342-04a5-7c48a99b99fb",
 //      "name-label":"astronomia",
@@ -124,6 +125,7 @@
 			// compatibilita' con XenServer
 			$domain["name-description"]="";
 			$domain["power-state"]="running";
+			$domain["uster-type"]="xen";
 			
 			// controlla se e' finito un dominio
 			if ($parenthesisbalance_domain == 0) {
@@ -159,7 +161,7 @@
 			$vm=$vms[0];
 		} else {
 			// create dummy VM for disappearing VM
-			$vm=array("VCPUs-number" => "0", "uuid" => $carry_uuid, "name-label" => $vm_name, "name-description" => "", "power-state" => "deleted", "memory-actual_mb" => "0", "ports" => array() );
+			$vm=array("cluster-type" => "xen", "VCPUs-number" => "0", "uuid" => $carry_uuid, "name-label" => $vm_name, "name-description" => "", "power-state" => "deleted", "memory-actual_mb" => "0", "ports" => array() );
 		}
 		/*
 		$vm_entry=array();

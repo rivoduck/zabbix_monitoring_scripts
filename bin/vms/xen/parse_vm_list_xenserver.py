@@ -22,6 +22,7 @@ def createVmEntry(detailed=False, uuid="", vcpus="", name="", descr="", powersta
     vmEntry=None
     if uuid != "" and name[:22] != "Control domain on host":
         vmEntry={
+            "cluster-type": "xen",
             "VCPUs-number": vcpus,
             "uuid": uuid,
             "name-label": name,
